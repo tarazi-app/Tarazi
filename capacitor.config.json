@@ -1,0 +1,7 @@
+{
+  "appId": "kz.tarazi.avtovesy",
+  "appName": "Учёт автовесов",
+  "webDir": "www",
+  "backgroundColor": "#0F172A",
+  "android": { "allowMixedContent": false }
+}
