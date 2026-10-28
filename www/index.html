@@ -1,4 +1,4 @@
-<title>Учёт автовесов</title>
+<title>Tarazi</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0F172A">
 <style>
@@ -128,7 +128,7 @@ button{font-family:inherit}
 @media (min-width:520px){.tiles--4{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .tcell{background:var(--surface-2);border-radius:14px;padding:14px 8px;text-align:center;min-width:0}
 .tcell .ic{color:var(--ink-2)}
-.tcell__v{font-size:clamp(17px,4.8vw,22px);font-weight:600;line-height:1.2;margin-top:6px;overflow-wrap:anywhere}
+.tcell__v{font-size:clamp(15px,4.6vw,22px);font-weight:600;line-height:1.2;margin-top:6px;white-space:nowrap}
 .tcell__l{font-size:13px;color:var(--ink-2)}
 .sect{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:28px 0 12px}
 .rgroup{display:flex;align-items:center;gap:10px;margin:18px 0 10px;font-weight:600}
@@ -177,7 +177,7 @@ button{font-family:inherit}
 .carcard{padding:20px}
 .carcard__top{display:flex;align-items:center;gap:14px}
 .carcard__id{flex:1;min-width:0}
-.carcard__name{font-size:20px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.carcard__name{font-size:clamp(17px,5.2vw,20px);font-weight:600;line-height:1.25;overflow-wrap:anywhere}
 .facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;margin:16px 0 0;padding:0;list-style:none;color:var(--ink-2)}
 .facts li{display:flex;align-items:center;gap:10px;min-width:0;overflow-wrap:anywhere}
 .netbox{margin-top:18px;padding:18px 20px;border-radius:16px;background:var(--navy);color:var(--navy-ink)}
@@ -248,6 +248,44 @@ select.inp{padding-right:8px}
 .fhint{color:var(--ink-2);font-size:13px;margin-top:10px}
 .dlg-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:22px}
 .dlg-del{margin-right:auto}
+.langsel{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px 0}
+.langsel .logo-tile{width:64px;height:64px}
+.langsel h1{margin:6px 0 0;font-size:32px}
+.langsel__btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;margin-top:18px}
+.btn--lg{min-height:56px;font-size:18px;justify-content:center}
+
+/* phone layout */
+.tbl--stack td[data-l=""]::before{display:none}
+@media (max-width:600px){
+  .tbl td,.tbl th{padding-left:8px;padding-right:8px}
+  .tbl th:first-child,.tbl td:first-child{padding-left:12px}
+  .tbl--stack,.tbl--stack.tbl--sum,.tbl--stack.tbl--per{min-width:0}
+  .tbl--stack thead{display:none}
+  .tbl--stack,.tbl--stack tbody,.tbl--stack tfoot,.tbl--stack tr{display:block}
+  .tbl--stack tr{padding:10px 16px;border-bottom:1px solid var(--line)}
+  .tbl--stack tbody tr:last-child{border-bottom:0}
+  .tbl--stack td,.tbl--stack td:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:3px 0;border:0;text-align:right;overflow-wrap:anywhere}
+  .tbl--stack td::before{content:attr(data-l);flex:none;color:var(--ink-2);font:400 13px var(--font-ui);text-align:left}
+  .tbl--stack td[colspan]{justify-content:flex-start;font-weight:600}
+  .tbl--stack tfoot tr{background:var(--surface-2)}
+  .tbl--trips{min-width:0}
+  .tbl--trips td,.tbl--trips th{padding-left:6px;padding-right:6px}
+  .tbl--trips .acts{padding:2px 2px}
+  .overlay{align-items:flex-end;padding:16px 0 0}
+  .dialog{margin:0;max-width:none;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;overscroll-behavior:contain;border-radius:20px 20px 0 0;border-bottom:0;
+    padding:20px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+  .dlg-actions{position:sticky;bottom:0;margin:16px -16px calc(-16px - env(safe-area-inset-bottom,0px));padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
+  .dlg-actions .btn{flex:1 1 auto;justify-content:center}
+  .xgrid{gap:8px}
+}
+@media (max-width:400px){
+  .tbl--trips td{font-size:13.5px}
+  .tbl--trips td,.tbl--trips th{padding-left:4px;padding-right:4px}
+  .tbl--trips th{font-size:12px}
+  .tbl--trips th:first-child,.tbl--trips td:first-child{padding-left:10px}
+  .tbl--trips .ibtn{width:36px;height:36px}
+  .langsel .logo-tile{display:inline-flex}
+}
 .xgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
 .xbtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);cursor:pointer;text-align:left;font:inherit}
 .xbtn:hover{border-color:var(--ink-2)}
@@ -268,6 +306,13 @@ select.inp{padding-right:8px}
 <script>
 (function(){
 'use strict';
+const LKEY='tarazi.lang';
+let LANG=(()=>{try{const v=localStorage.getItem(LKEY);return v==='kk'||v==='ru'?v:null;}catch(e){return null;}})();
+const KK={"Маршруты": "Бағыттар", "Карьер → Завод": "Карьер → Зауыт", "Машины": "Көліктер", "Водители": "Жүргізушілер", "Фамилия Имя Отчество": "Тегі Аты Әкесінің аты", "Операторы": "Операторлар", "Материалы": "Материалдар", "Щебень 5–20": "Қиыршық тас 5–20", "Оранжевый": "Қызғылт сары", "Красный": "Қызыл", "Розовый": "Қызғылт", "Фиолетовый": "Күлгін", "Синий": "Көк", "Бирюзовый": "Көгілдір", "Зелёный": "Жасыл", "Серый": "Сұр", "без даты": "күні жоқ", "Не указан": "Көрсетілмеген", "Не удалось сохранить: у вас нет прав на изменение данных.": "Сақталмады: деректерді өзгертуге құқығыңыз жоқ.", "Не удалось сохранить изменения. Повторите действие.": "Өзгерістер сақталмады. Әрекетті қайталаңыз.", "ОТЧЁТ ПО МАШИНЕ": "КӨЛІК БОЙЫНША ЕСЕП", "Дата": "Күні", "Смена": "Ауысым", "Оператор автовесов": "Автотаразы операторы", "Номер машины": "Көлік нөмірі", "Водитель": "Жүргізуші", "Время прибытия": "Келген уақыты", "Маршрут": "Бағыт", "Материал": "Материал", "Вес тары, кг": "Тара салмағы, кг", "№ рейса": "Рейс №", "Время взвешивания": "Өлшеу уақыты", "Брутто, кг": "Брутто, кг", "Тара, кг": "Тара, кг", "Нетто, кг": "Нетто, кг", "ИТОГО, рейсов: ": "БАРЛЫҒЫ, рейс: ", "ОБЩИЙ РАСЧЁТ ЗА СМЕНУ": "АУЫСЫМ БОЙЫНША ЖАЛПЫ ЕСЕП", "РАСЧЁТ ПО МАШИНАМ": "КӨЛІКТЕР БОЙЫНША ЕСЕП", "Прибытие": "Келуі", "Рейсов": "Рейс", "Брутто всего, кг": "Брутто жиыны, кг", "Нетто всего, кг": "Нетто жиыны, кг", "ИТОГО": "БАРЛЫҒЫ", "ИТОГО ПО МАТЕРИАЛАМ": "МАТЕРИАЛДАР БОЙЫНША ЖИЫНЫ", "Машин": "Көлік", "ВСЕ РЕЙСЫ": "БАРЛЫҚ РЕЙСТЕР", "СВОДКА ЗА ПЕРИОД": "КЕЗЕҢ БОЙЫНША ЖИЫНТЫҚ", "С": "Бастап", "начала": "басынан", "По": "Дейін", "сегодня": "бүгінге", "ПО СМЕНАМ": "АУЫСЫМДАР БОЙЫНША", "Оператор": "Оператор", "ПО МАТЕРИАЛАМ": "МАТЕРИАЛДАР БОЙЫНША", "ПО МАРШРУТАМ": "БАҒЫТТАР БОЙЫНША", "ПО ВОДИТЕЛЯМ": "ЖҮРГІЗУШІЛЕР БОЙЫНША", "Файл сохранён: ": "Файл сақталды: ", "Подождите секунду и повторите.": "Бір сәт күтіп, қайталаңыз.", "Отчёт по машине": "Көлік бойынша есеп", "Рейсы": "Рейстер", "Время": "Уақыты", " рейс.": " рейс", "Общий расчёт за смену": "Ауысым бойынша жалпы есеп", "По машинам": "Көліктер бойынша", "Машина": "Көлік", "Итого": "Барлығы", "По материалам": "Материалдар бойынша", "Все рейсы": "Барлық рейстер", "Сводка за период": "Кезең бойынша жиынтық", "С даты": "Бастап", "По дату": "Дейін", "Смен": "Ауысым", "Нетто всего, т": "Нетто жиыны, т", "По сменам": "Ауысымдар бойынша", "По маршрутам": "Бағыттар бойынша", "По водителям": "Жүргізушілер бойынша", "сформировано": "жасалды", "В этом окне сохранение файлов недоступно. Откройте сайт в браузере.": "Бұл терезеде файлды сақтау мүмкін емес. Сайтты браузерде ашыңыз.", "Не удалось сохранить файл.": "Файл сақталмады.", "Готовлю файл…": "Файл дайындалуда…", "Не удалось подготовить файл. Попробуйте другой формат.": "Файл дайындалмады. Басқа форматты таңдап көріңіз.", "Для печати и отправки": "Басып шығару және жіберу үшін", "Картинка для мессенджера": "Мессенджерге арналған сурет", "Простой текст": "Қарапайым мәтін", "Таблица для Excel": "Excel-ге арналған кесте", "Скачать отчёт": "Есепті жүктеу", "Закрыть": "Жабу", "<p class=\"note\">Общее хранилище недоступно. Данные сохраняются только в этом браузере.</p>": "<p class=\"note\">Ортақ қойма қолжетімсіз. Деректер тек осы браузерде сақталады.</p>", "светлая": "жарық", "тёмная": "қараңғы", "как в системе": "жүйедегідей", "Тема: ": "Тақырып: ", ". Нажмите, чтобы сменить": ". Ауыстыру үшін басыңыз", "Активна": "Белсенді", "Закрыта": "Жабық", "машина": "көлік", "машины": "көлік", "машин": "көлік", "т": "т", "Смен пока нет. Создайте проект на смену: дата, смена и оператор автовесов.": "Әзірге ауысым жоқ. Ауысымға жоба жасаңыз: күні, ауысым және автотаразы операторы.", "Создать смену": "Ауысым жасау", "Ничего не найдено.": "Ештеңе табылмады.", "В этой категории смен пока нет.": "Бұл санатта әзірге ауысым жоқ.", "Список смен": "Ауысымдар тізімі", "Справочник": "Анықтамалық", "Новая смена": "Жаңа ауысым", "Тип смены": "Ауысым түрі", "Ночная смена": "Түнгі ауысым", "Дневная смена": "Күндізгі ауысым", "Поиск по дате или оператору…": "Күні немесе оператор бойынша іздеу…", "Поиск по дате или оператору": "Күні немесе оператор бойынша іздеу", "<p class=\"lead\">Добавьте машины, и здесь появится общий расчёт.</p>": "<p class=\"lead\">Көліктерді қосыңыз, мұнда жалпы есеп пайда болады.</p>", "Итого за смену": "Ауысым бойынша барлығы", "Итого НЕТТО": "Барлығы НЕТТО", "кг": "кг", "рейс": "рейс", "рейса": "рейс", "рейсов": "рейс", "Без маршрута": "Бағытсыз", "маш.": "көл.", "Копировать из прошлой смены": "Өткен ауысымнан көшіру", "В этой смене пока нет машин. Для каждой машины создаётся свой бланк.": "Бұл ауысымда әзірге көлік жоқ. Әр көлікке жеке бланк жасалады.", "Добавить машину": "Көлік қосу", "<div class=\"empty\"><p>Ничего не найдено.</p></div>": "<div class=\"empty\"><p>Ештеңе табылмады.</p></div>", "Все смены": "Барлық ауысымдар", "Скачать общий расчёт": "Жалпы есепті жүктеу", "Изменить смену": "Ауысымды өзгерту", "Закрыть смену": "Ауысымды жабу", "Открыть снова": "Қайта ашу", "Оператор:": "Оператор:", "Рейс": "Рейс", "Рейса": "Рейс", "кг НЕТТО": "кг НЕТТО", "Создать копию смены": "Ауысымның көшірмесін жасау", "Найти машину, водителя, маршрут…": "Көлікті, жүргізушіні, бағытты іздеу…", "Поиск машины": "Көлік іздеу", "НЕТТО:": "НЕТТО:", "<span class=\"calc__warn\">Брутто меньше тары. Проверьте вес.</span>": "<span class=\"calc__warn\">Брутто тарадан аз. Салмақты тексеріңіз.</span>", "Изменить рейс": "Рейсті өзгерту", "Удалить рейс": "Рейсті жою", "Назад к смене": "Ауысымға оралу", "Скачать отчёт по машине": "Көлік бойынша есепті жүктеу", "<p class=\"note\">Смена закрыта. Рейсы можно добавлять и править, статус меняется на экране смены.</p>": "<p class=\"note\">Ауысым жабық. Рейстерді қосуға және түзетуге болады, күй ауысым бетінде өзгертіледі.</p>", "· Прибытие:": "· Келуі:", "Изменить машину": "Көлікті өзгерту", "Тара:": "Тара:", "Общий вес НЕТТО": "Жалпы НЕТТО салмағы", "Новое взвешивание": "Жаңа өлшеу", "Вес БРУТТО (кг)": "БРУТТО салмағы (кг)", "Вес брутто, кг": "Брутто салмағы, кг", "ЧЧ:ММ": "СС:ММ", "Время взвешивания, цифрами": "Өлшеу уақыты, сандармен", "Записать рейс": "Рейсті жазу", "БРУТТО": "БРУТТО", "НЕТТО": "НЕТТО", "<tr><td colspan=\"5\" class=\"td-empty\">Рейсов пока нет. Введите вес брутто после взвешивания.</td></tr>": "<tr><td colspan=\"5\" class=\"td-empty\">Әзірге рейс жоқ. Өлшегеннен кейін брутто салмағын енгізіңіз.</td></tr>", "Скачать сводку": "Жиынтықты жүктеу", "Итоги по сменам, материалам, маршрутам и водителям. Отчёт выгружается в CSV для Excel.": "Ауысымдар, материалдар, бағыттар және жүргізушілер бойынша қорытынды. Есеп Excel үшін CSV форматында жүктеледі.", "7 дней": "7 күн", "Этот месяц": "Осы ай", "Всё время": "Барлық уақыт", "Смены": "Ауысымдар", "т НЕТТО": "т НЕТТО", "<div class=\"empty\"><p>За выбранный период смен нет.</p></div>": "<div class=\"empty\"><p>Таңдалған кезеңде ауысым жоқ.</p></div>", "Резервная копия": "Резервтік көшірме", "Все смены и справочник одним файлом JSON. Храните его на случай, если данные понадобятся вне сайта.": "Барлық ауысымдар мен анықтамалық бір JSON файлында. Деректер қосымшадан тыс қажет болған жағдайда сақтап қойыңыз.", "Скачать резервную копию": "Резервтік көшірмені жүктеу", "смена": "ауысым", "смены": "ауысым", "смен": "ауысым", "бланк": "бланк", "бланка": "бланк", "бланков": "бланк", "не используется": "қолданылмайды", "Изменить": "Өзгерту", "Удалить": "Жою", "Эти значения выбираются из списка при создании смены и бланка машины. Новое значение можно добавить и прямо в форме.": "Бұл мәндер ауысым мен көлік бланкін жасағанда тізімнен таңдалады. Жаңа мәнді форманың өзінде де қосуға болады.", "Разделы справочника": "Анықтамалық бөлімдері", "Новое значение, раздел": "Жаңа мән, бөлім", "Добавить": "Қосу", "Найти в разделе": "Бөлімнен іздеу", "Поиск в разделе": "Бөлімнен іздеу", "В этом разделе пока пусто. Добавьте первое значение выше.": "Бұл бөлім әзірге бос. Жоғарыдан алғашқы мәнді қосыңыз.", "В сменах есть значения, которых нет в справочнике: {k}.": "Ауысымдарда анықтамалықта жоқ мәндер бар: {k}.", "Добавить из смен": "Ауысымдардан қосу", "<p class=\"lead\" style=\"margin-top:24px\">Загружаю данные…</p>": "<p class=\"lead\" style=\"margin-top:24px\">Деректер жүктелуде…</p>", "<option value=\"\">Выберите из списка…</option>": "<option value=\"\">Тізімнен таңдаңыз…</option>", "(нет в справочнике)": "(анықтамалықта жоқ)", "<option value=\"__new__\">+ Добавить новый…</option>": "<option value=\"__new__\">+ Жаңасын қосу…</option>", "Новое значение": "Жаңа мән", "<p class=\"fhint\">Справочник пока пуст. Нажмите «Добавить», и значение сохранится в справочнике.</p>": "<p class=\"fhint\">Анықтамалық әзірге бос. «Қосу» батырмасын басыңыз, мән анықтамалықта сақталады.</p>", " inputmode=\"numeric\" maxlength=\"5\" placeholder=\"ЧЧ:ММ\" data-time=\"1\"": " inputmode=\"numeric\" maxlength=\"5\" placeholder=\"СС:ММ\" data-time=\"1\"", "<button type=\"button\" class=\"btn btn--ghost btn--danger dlg-del\" data-act=\"modal-delete\">Удалить</button>": "<button type=\"button\" class=\"btn btn--ghost btn--danger dlg-del\" data-act=\"modal-delete\">Жою</button>", "Отмена": "Бас тарту", "Сохранить": "Сақтау", "Введите значение": "Мәнді енгізіңіз", "Выберите значение из списка": "Тізімнен мәнді таңдаңыз", "Заполните это поле": "Бұл өрісті толтырыңыз", "Файл готов": "Файл дайын", "Автоматическое сохранение здесь недоступно. Скопируйте текст и вставьте в Excel или сохраните как файл «{f}».": "Мұнда автоматты сақтау мүмкін емес. Мәтінді көшіріп Excel-ге қойыңыз немесе «{f}» файлы ретінде сақтаңыз.", "Скопировать": "Көшіру", "Данные подставлены из последней записи по этому номеру. Проверьте и измените при необходимости.": "Деректер осы нөмір бойынша соңғы жазбадан алынды. Тексеріп, қажет болса өзгертіңіз.", "Копия смены": "Ауысым көшірмесі", "Создать копию": "Көшірме жасау", "<p class=\"dlg-note\">Машины скопируются без рейсов. Время прибытия, тару и водителей можно поправить в каждой машине.</p>": "<p class=\"dlg-note\">Көліктер рейстерсіз көшіріледі. Келген уақытты, тараны және жүргізушілерді әр көлікте түзетуге болады.</p>", "Дневная": "Күндізгі", "Ночная": "Түнгі", "Название смены": "Ауысым атауы", "Первая смена (день)": "Бірінші ауысым (күндіз)", "Вторая смена (день)": "Екінші ауысым (күндіз)", "Новый оператор": "Жаңа оператор", "Статус": "Күйі", "<datalist id=\"dl-shift\"><option value=\"Первая смена (день)\"><option value=\"Вторая смена (день)\"><option value=\"Первая смена (ночь)\"><option value=\"Вторая смена (ночь)\"></datalist>": "<datalist id=\"dl-shift\"><option value=\"Бірінші ауысым (күндіз)\"><option value=\"Екінші ауысым (күндіз)\"><option value=\"Бірінші ауысым (түн)\"><option value=\"Екінші ауысым (түн)\"></datalist>", "Смена обновлена": "Ауысым жаңартылды", "Смена создана": "Ауысым жасалды", "Новая машина": "Жаңа көлік", "Создать бланк": "Бланк жасау", "Новая": "Жаңа", "Введите время, например 07:26": "Уақытты енгізіңіз, мысалы 07:26", "Новый": "Жаңа", "например 14500": "мысалы 14500", "Введите вес тары числом больше нуля": "Тара салмағын нөлден үлкен санмен енгізіңіз", "Перевозимый материал": "Тасымалданатын материал", "Цвет карточки": "Карточка түсі", "Данные машины обновлены": "Көлік деректері жаңартылды", "Бланк машины создан": "Көлік бланкі жасалды", "Рейс ": "Рейс ", "Введите время, например 14:35": "Уақытты енгізіңіз, мысалы 14:35", "Введите вес числом больше нуля": "Салмақты нөлден үлкен санмен енгізіңіз", "Нетто = брутто − тара ({t} кг). Пересчитается автоматически.": "Нетто = брутто − тара ({t} кг). Автоматты түрде қайта есептеледі.", "Рейс обновлён": "Рейс жаңартылды", "Изменить значение": "Мәнді өзгерту", "Название": "Атауы", "Такое значение уже есть": "Мұндай мән бұрыннан бар", "<p class=\"dlg-note\">В уже созданных сменах значение не изменится. Оно поменяется только в справочнике.</p>": "<p class=\"dlg-note\">Бұрын жасалған ауысымдарда мән өзгермейді. Ол тек анықтамалықта өзгереді.</p>", "Сохранено": "Сақталды", "Введите вес брутто числом, например 41250": "Брутто салмағын санмен енгізіңіз, мысалы 41250", "Введите время цифрами, например 14:35": "Уақытты сандармен енгізіңіз, мысалы 14:35", "Брутто меньше тары. Проверьте вес.": "Брутто тарадан аз. Салмақты тексеріңіз.", "Рейс записан: нетто ": "Рейс жазылды: нетто ", " кг": " кг", "Сводка за период: ": "Кезең бойынша жиынтық: ", "начало": "басы", "Сводка_": "Жиынтық_", "Смена закрыта": "Ауысым жабылды", "Смена снова активна": "Ауысым қайтадан белсенді", "Удалить смену?": "Ауысымды жою керек пе?", "Удалить смену": "Ауысымды жою", "Смена «{n}» за {d} будет удалена вместе с машинами ({c}) и рейсами ({r}). Это действие нельзя отменить.": "«{n}» ауысымы ({d}) көліктермен ({c}) және рейстермен ({r}) бірге жойылады. Бұл әрекетті қайтару мүмкін емес.", "Смена удалена": "Ауысым жойылды", "Все машины из прошлой смены уже добавлены": "Өткен ауысымның барлық көліктері қосылып қойған", "Копировать машины?": "Көліктерді көшіру керек пе?", "Копировать": "Көшіру", "Из смены «{n}» за {d} будет добавлено машин: {k}. Копируются номер, водитель, маршрут, материал, тара и цвет. Рейсы не копируются, время прибытия ставится текущее.": "«{n}» ауысымынан ({d}) көліктер қосылады: {k}. Нөмірі, жүргізуші, бағыт, материал, тара және түсі көшіріледі. Рейстер көшірілмейді, келген уақыт қазіргі уақыт болып қойылады.", "Добавлено машин: ": "Қосылған көліктер: ", "Удалить машину?": "Көлікті жою керек пе?", "Удалить машину": "Көлікті жою", "Бланк {p} ({d}) будет удалён вместе с рейсами: {k}. Это действие нельзя отменить.": "{p} ({d}) бланкі рейстермен бірге жойылады: {k}. Бұл әрекетті қайтару мүмкін емес.", "Машина удалена": "Көлік жойылды", "Удалить рейс?": "Рейсті жою керек пе?", "Рейс {i} машины {p} (брутто {g} кг) будет удалён.": "{p} көлігінің {i}-рейсі (брутто {g} кг) жойылады.", "Рейс удалён": "Рейс жойылды", "Машина ": "Көлік ", "Отчёт_": "Есеп_", "Общий расчёт за смену: ": "Ауысым бойынша жалпы есеп: ", "Общий-расчёт_": "Жалпы-есеп_", "Добавлено: ": "Қосылды: ", "Удалить из справочника?": "Анықтамалықтан жою керек пе?", "«{n}» будет удалено из справочника.": "«{n}» анықтамалықтан жойылады.", "Значение используется в сменах ({k}), там оно останется без изменений.": "Мән ауысымдарда қолданылады ({k}), онда ол өзгеріссіз қалады.", "Удалено из справочника": "Анықтамалықтан жойылды", "Добавлено значений: ": "Қосылған мәндер: ", "Скопировано": "Көшірілді", "Выделите текст и скопируйте вручную": "Мәтінді белгілеп, қолмен көшіріңіз", "Нет связи с хранилищем данных": "Деректер қоймасымен байланыс жоқ", "в среднем {a} кг за рейс": "орта есеппен рейсіне {a} кг", "Настройки": "Баптаулар", "Язык": "Тіл", "Тема": "Тақырып", "Светлая": "Жарық", "Тёмная": "Қараңғы", "Как в системе": "Жүйедегідей", "Работает без интернета, данные хранятся на этом устройстве": "Интернетсіз жұмыс істейді, деректер осы құрылғыда сақталады", "Тілді таңдаңыз · Выберите язык": "Тілді таңдаңыз · Выберите язык"};
+function tx(s,p){let r=(LANG==='kk'&&KK[s])||s;if(p)r=r.replace(/\{(\w+)\}/g,(m,k)=>k in p?p[k]:m);return r;}
+const LOC=()=>'ru-RU';
+const KK_MONTHS=['қаңтар','ақпан','наурыз','сәуір','мамыр','маусым','шілде','тамыз','қыркүйек','қазан','қараша','желтоқсан'];
+try{document.documentElement.lang=LANG||'ru';}catch(e){}
 
 const KEY='avtovesy.shifts.v1', GKEY='avtovesy.glossary.v1', TKEY='avtovesy.theme';
 const $app=document.getElementById('app');
@@ -275,17 +320,17 @@ const $modal=document.getElementById('modal');
 const $toast=document.getElementById('toast');
 
 const CATS=[
-  {id:'routes',label:'Маршруты',ph:'Карьер → Завод'},
-  {id:'vehicles',label:'Машины',ph:'123ABC02'},
-  {id:'drivers',label:'Водители',ph:'Фамилия Имя Отчество'},
-  {id:'operators',label:'Операторы',ph:'Фамилия Имя Отчество'},
-  {id:'materials',label:'Материалы',ph:'Щебень 5–20'}
+  {id:'routes',get label(){return tx("Маршруты");},get ph(){return tx("Карьер → Завод");}},
+  {id:'vehicles',get label(){return tx("Машины");},ph:'123ABC02'},
+  {id:'drivers',get label(){return tx("Водители");},get ph(){return tx("Фамилия Имя Отчество");}},
+  {id:'operators',get label(){return tx("Операторы");},get ph(){return tx("Фамилия Имя Отчество");}},
+  {id:'materials',get label(){return tx("Материалы");},get ph(){return tx("Щебень 5–20");}}
 ];
 const COLORS=[
-  {id:'orange',hex:'#F97316',name:'Оранжевый'},{id:'red',hex:'#DC2626',name:'Красный'},
-  {id:'pink',hex:'#DB2777',name:'Розовый'},{id:'purple',hex:'#7C3AED',name:'Фиолетовый'},
-  {id:'blue',hex:'#2563EB',name:'Синий'},{id:'teal',hex:'#0D9488',name:'Бирюзовый'},
-  {id:'green',hex:'#16A34A',name:'Зелёный'},{id:'slate',hex:'#475569',name:'Серый'}
+  {id:'orange',hex:'#F97316',get name(){return tx("Оранжевый");}},{id:'red',hex:'#DC2626',get name(){return tx("Красный");}},
+  {id:'pink',hex:'#DB2777',get name(){return tx("Розовый");}},{id:'purple',hex:'#7C3AED',get name(){return tx("Фиолетовый");}},
+  {id:'blue',hex:'#2563EB',get name(){return tx("Синий");}},{id:'teal',hex:'#0D9488',get name(){return tx("Бирюзовый");}},
+  {id:'green',hex:'#16A34A',get name(){return tx("Зелёный");}},{id:'slate',hex:'#475569',get name(){return tx("Серый");}}
 ];
 const colorHex=id=>(COLORS.find(c=>c.id===id)||COLORS[0]).hex;
 const emptyGloss=()=>({routes:[],vehicles:[],drivers:[],operators:[],materials:[]});
@@ -317,6 +362,7 @@ const IC={
   pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/>',
   search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
   book:'<path d="M2 4h6a4 4 0 014 4v13a3 3 0 00-3-3H2z"/><path d="M22 4h-6a4 4 0 00-4 4v13a3 3 0 013-3h7z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   moon:'<path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>',
   contrast:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18z" fill="currentColor"/>',
@@ -325,7 +371,7 @@ const IC={
 };
 const icon=(n,cls)=>`<svg class="ic${cls?' '+cls:''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=(n,d=2)=>Number(n||0).toLocaleString('ru-RU',{maximumFractionDigits:d});
+const fmt=(n,d=2)=>Number(n||0).toLocaleString(LOC(),{maximumFractionDigits:d});
 const r2=n=>Math.round(n*100)/100;
 const pad=n=>String(n).padStart(2,'0');
 const nowHM=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());};
@@ -352,8 +398,8 @@ function fmtTimeLive(v){
 function plural(n,f){const a=Math.abs(n)%100,b=a%10;if(a>10&&a<20)return f[2];if(b>1&&b<5)return f[1];if(b===1)return f[0];return f[2];}
 function parseNum(s){const t=String(s==null?'':s).replace(/[\s  ]/g,'').replace(',','.');if(t==='')return NaN;const n=Number(t);return isFinite(n)?n:NaN;}
 function parseDate(s){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?new Date(+m[1],+m[2]-1,+m[3]):null;}
-function dateLong(s){const d=parseDate(s);return d?d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'}):(s||'без даты');}
-function dateShort(s){const d=parseDate(s);return d?d.toLocaleDateString('ru-RU',{day:'numeric',month:'long'}):(s||'без даты');}
+function dateLong(s){const d=parseDate(s);if(!d)return s||tx("без даты");if(LANG==='kk')return d.getDate()+' '+KK_MONTHS[d.getMonth()]+' '+d.getFullYear();return d.toLocaleDateString(LOC(),{day:'numeric',month:'long',year:'numeric'});}
+function dateShort(s){const d=parseDate(s);if(!d)return s||tx("без даты");if(LANG==='kk')return d.getDate()+' '+KK_MONTHS[d.getMonth()];return d.toLocaleDateString(LOC(),{day:'numeric',month:'long'});}
 function dateRu(s){const d=parseDate(s);return d?pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.'+d.getFullYear():(s||'');}
 function stable(v){return JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((o,kk)=>(o[kk]=x[kk],o),{}):x);}
 function safeName(s){return String(s).replace(/[\\\/:*?"<>|]+/g,'-').replace(/\s+/g,'_');}
@@ -423,7 +469,7 @@ function shiftStats(sh){let trips=0,net=0,gross=0;sh.cars.forEach(c=>{const s=ca
 function groupStats(list,pick){
   const m={};
   list.forEach(sh=>sh.cars.forEach(c=>{
-    const name=pick(c)||'Не указан',k=name.trim().toLowerCase(),s=carStats(c);
+    const name=pick(c)||tx("Не указан"),k=name.trim().toLowerCase(),s=carStats(c);
     if(!m[k])m[k]={name,cars:0,trips:0,net:0};
     m[k].cars++;m[k].trips+=s.n;m[k].net=r2(m[k].net+s.net);
   }));
@@ -441,7 +487,7 @@ function enqueue(id,job){
   pending[id]=(pending[id]||0)+1;
   queues[id]=(queues[id]||Promise.resolve()).then(job).catch(err=>{
     const denied=err&&err.code==='invalid_argument';
-    toast(denied?'Не удалось сохранить: у вас нет прав на изменение данных.':'Не удалось сохранить изменения. Повторите действие.','err');
+    toast(denied?tx("Не удалось сохранить: у вас нет прав на изменение данных."):tx("Не удалось сохранить изменения. Повторите действие."),'err');
   }).then(()=>{pending[id]--;});
 }
 function persist(id){
@@ -496,56 +542,56 @@ const row=(...a)=>a.map(cell).join(';');
 
 function carReportCsv(sh,car){
   const st=carStats(car),L=[];
-  L.push(row('ОТЧЁТ ПО МАШИНЕ'));
-  L.push(row('Дата',dateRu(sh.date)));
-  L.push(row('Смена',sh.shift));
-  L.push(row('Оператор автовесов',sh.operator));
-  L.push(row('Номер машины',car.plate));
-  L.push(row('Водитель',car.driver));
-  L.push(row('Время прибытия',car.arrival));
-  L.push(row('Маршрут',car.route));
-  L.push(row('Материал',car.material));
-  L.push(row('Вес тары, кг',car.tare));
+  L.push(row(tx("ОТЧЁТ ПО МАШИНЕ")));
+  L.push(row(tx("Дата"),dateRu(sh.date)));
+  L.push(row(tx("Смена"),sh.shift));
+  L.push(row(tx("Оператор автовесов"),sh.operator));
+  L.push(row(tx("Номер машины"),car.plate));
+  L.push(row(tx("Водитель"),car.driver));
+  L.push(row(tx("Время прибытия"),car.arrival));
+  L.push(row(tx("Маршрут"),car.route));
+  L.push(row(tx("Материал"),car.material));
+  L.push(row(tx("Вес тары, кг"),car.tare));
   L.push('');
-  L.push(row('№ рейса','Время взвешивания','Брутто, кг','Тара, кг','Нетто, кг'));
+  L.push(row(tx("№ рейса"),tx("Время взвешивания"),tx("Брутто, кг"),tx("Тара, кг"),tx("Нетто, кг")));
   car.trips.forEach((t,i)=>L.push(row(i+1,t.time,t.gross,car.tare,r2(t.gross-car.tare))));
-  L.push(row('ИТОГО, рейсов: '+st.n,'',st.gross,'',st.net));
+  L.push(row(tx("ИТОГО, рейсов: ")+st.n,'',st.gross,'',st.net));
   return L.join('\r\n');
 }
 function shiftReportCsv(sh){
   const L=[],tot=shiftStats(sh);
-  L.push(row('ОБЩИЙ РАСЧЁТ ЗА СМЕНУ'));
-  L.push(row('Дата',dateRu(sh.date)));
-  L.push(row('Смена',sh.shift));
-  L.push(row('Оператор автовесов',sh.operator));
+  L.push(row(tx("ОБЩИЙ РАСЧЁТ ЗА СМЕНУ")));
+  L.push(row(tx("Дата"),dateRu(sh.date)));
+  L.push(row(tx("Смена"),sh.shift));
+  L.push(row(tx("Оператор автовесов"),sh.operator));
   L.push('');
-  L.push(row('РАСЧЁТ ПО МАШИНАМ'));
-  L.push(row('№','Номер машины','Водитель','Маршрут','Материал','Прибытие','Тара, кг','Рейсов','Брутто всего, кг','Нетто всего, кг'));
+  L.push(row(tx("РАСЧЁТ ПО МАШИНАМ")));
+  L.push(row('№',tx("Номер машины"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Прибытие"),tx("Тара, кг"),tx("Рейсов"),tx("Брутто всего, кг"),tx("Нетто всего, кг")));
   sh.cars.forEach((c,i)=>{const s=carStats(c);L.push(row(i+1,c.plate,c.driver,c.route,c.material,c.arrival,c.tare,s.n,s.gross,s.net));});
-  L.push(row('ИТОГО','','','','','','',tot.trips,tot.gross,tot.net));
+  L.push(row(tx("ИТОГО"),'','','','','','',tot.trips,tot.gross,tot.net));
   L.push('');
-  L.push(row('ИТОГО ПО МАТЕРИАЛАМ'));
-  L.push(row('Материал','Машин','Рейсов','Нетто, кг'));
+  L.push(row(tx("ИТОГО ПО МАТЕРИАЛАМ")));
+  L.push(row(tx("Материал"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
   materialStats(sh).forEach(m=>L.push(row(m.name,m.cars,m.trips,m.net)));
   L.push('');
-  L.push(row('ВСЕ РЕЙСЫ'));
-  L.push(row('№','Номер машины','Водитель','Маршрут','Материал','Время взвешивания','Тара, кг','Брутто, кг','Нетто, кг'));
+  L.push(row(tx("ВСЕ РЕЙСЫ")));
+  L.push(row('№',tx("Номер машины"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Время взвешивания"),tx("Тара, кг"),tx("Брутто, кг"),tx("Нетто, кг")));
   let n=0;
   sh.cars.forEach(c=>c.trips.forEach(t=>{n++;L.push(row(n,c.plate,c.driver,c.route,c.material,t.time,c.tare,t.gross,r2(t.gross-c.tare)));}));
   return L.join('\r\n');
 }
 function periodCsv(list){
   const L=[],tot=list.reduce((a,sh)=>{const s=shiftStats(sh);a.cars+=s.cars;a.trips+=s.trips;a.net=r2(a.net+s.net);return a;},{cars:0,trips:0,net:0});
-  L.push(row('СВОДКА ЗА ПЕРИОД'));
-  L.push(row('С',S.sFrom?dateRu(S.sFrom):'начала'));
-  L.push(row('По',S.sTo?dateRu(S.sTo):'сегодня'));
+  L.push(row(tx("СВОДКА ЗА ПЕРИОД")));
+  L.push(row(tx("С"),S.sFrom?dateRu(S.sFrom):tx("начала")));
+  L.push(row(tx("По"),S.sTo?dateRu(S.sTo):tx("сегодня")));
   L.push('');
-  L.push(row('ПО СМЕНАМ'));
-  L.push(row('Дата','Смена','Оператор','Машин','Рейсов','Нетто, кг'));
+  L.push(row(tx("ПО СМЕНАМ")));
+  L.push(row(tx("Дата"),tx("Смена"),tx("Оператор"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
   list.forEach(sh=>{const s=shiftStats(sh);L.push(row(dateRu(sh.date),sh.shift,sh.operator,s.cars,s.trips,s.net));});
-  L.push(row('ИТОГО','','',tot.cars,tot.trips,tot.net));
-  [['ПО МАТЕРИАЛАМ','Материал',c=>c.material],['ПО МАРШРУТАМ','Маршрут',c=>c.route],['ПО ВОДИТЕЛЯМ','Водитель',c=>c.driver]].forEach(([title,h,pick])=>{
-    L.push('');L.push(row(title));L.push(row(h,'Машин','Рейсов','Нетто, кг'));
+  L.push(row(tx("ИТОГО"),'','',tot.cars,tot.trips,tot.net));
+  [[tx("ПО МАТЕРИАЛАМ"),tx("Материал"),c=>c.material],[tx("ПО МАРШРУТАМ"),tx("Маршрут"),c=>c.route],[tx("ПО ВОДИТЕЛЯМ"),tx("Водитель"),c=>c.driver]].forEach(([title,h,pick])=>{
+    L.push('');L.push(row(title));L.push(row(h,tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
     groupStats(list,pick).forEach(g=>L.push(row(g.name,g.cars,g.trips,g.net)));
   });
   return L.join('\r\n');
@@ -554,11 +600,11 @@ async function saveFile(filename,text,bom){
   if(!S.downloads){openExportFallback(filename,text);return;}
   try{
     await S.downloads.save({filename,data:(bom?'﻿':'')+text});
-    toast('Файл сохранён: '+filename);
+    toast(tx("Файл сохранён: ")+filename);
   }catch(e){
     const code=e&&e.code;
     if(code==='declined')return;
-    if(code==='rate_limited'){toast('Подождите секунду и повторите.','err');return;}
+    if(code==='rate_limited'){toast(tx("Подождите секунду и повторите."),'err');return;}
     openExportFallback(filename,text);
   }
 }
@@ -568,44 +614,44 @@ const saveCsv=(f,t)=>saveFile(f,t,true);
 const stamp=()=>dateRu(todayISO())+' '+nowHM();
 function carDoc(sh,car){
   const st=carStats(car);
-  return {title:'Отчёт по машине',orient:'p',
-    meta:[['Дата',dateRu(sh.date)],['Смена',sh.shift],['Оператор автовесов',sh.operator],['Номер машины',car.plate],['Водитель',car.driver],['Время прибытия',car.arrival||'—'],['Маршрут',car.route],['Материал',car.material],['Вес тары, кг',fmt(car.tare)],['Нетто всего, кг',fmt(st.net)]],
-    tables:[{title:'Рейсы',head:['№','Время','Брутто, кг','Тара, кг','Нетто, кг'],align:'lrrrr',boldLast:true,
+  return {title:tx("Отчёт по машине"),orient:'p',
+    meta:[[tx("Дата"),dateRu(sh.date)],[tx("Смена"),sh.shift],[tx("Оператор автовесов"),sh.operator],[tx("Номер машины"),car.plate],[tx("Водитель"),car.driver],[tx("Время прибытия"),car.arrival||'—'],[tx("Маршрут"),car.route],[tx("Материал"),car.material],[tx("Вес тары, кг"),fmt(car.tare)],[tx("Нетто всего, кг"),fmt(st.net)]],
+    tables:[{title:tx("Рейсы"),head:['№',tx("Время"),tx("Брутто, кг"),tx("Тара, кг"),tx("Нетто, кг")],align:'lrrrr',boldLast:true,
       rows:car.trips.map((t,i)=>[i+1,t.time,fmt(t.gross),fmt(car.tare),fmt(r2(t.gross-car.tare))]),
-      foot:['Σ',st.n+' рейс.',fmt(st.gross),'',fmt(st.net)]}]};
+      foot:['Σ',st.n+tx(" рейс."),fmt(st.gross),'',fmt(st.net)]}]};
 }
 function shiftDoc(sh){
   const tot=shiftStats(sh);
   const trips=[];let n=0;
   sh.cars.forEach(c=>c.trips.forEach(t=>{n++;trips.push([n,c.plate,c.driver,c.route,c.material,t.time,fmt(c.tare),fmt(t.gross),fmt(r2(t.gross-c.tare))]);}));
-  return {title:'Общий расчёт за смену',orient:'l',
-    meta:[['Дата',dateRu(sh.date)],['Смена',sh.shift],['Оператор автовесов',sh.operator],['Машин',tot.cars],['Рейсов',tot.trips],['Нетто всего, кг',fmt(tot.net)]],
+  return {title:tx("Общий расчёт за смену"),orient:'l',
+    meta:[[tx("Дата"),dateRu(sh.date)],[tx("Смена"),sh.shift],[tx("Оператор автовесов"),sh.operator],[tx("Машин"),tot.cars],[tx("Рейсов"),tot.trips],[tx("Нетто всего, кг"),fmt(tot.net)]],
     tables:[
-      {title:'По машинам',head:['№','Машина','Водитель','Маршрут','Материал','Прибытие','Тара, кг','Рейсов','Брутто, кг','Нетто, кг'],align:'llllllrrrr',boldLast:true,
+      {title:tx("По машинам"),head:['№',tx("Машина"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Прибытие"),tx("Тара, кг"),tx("Рейсов"),tx("Брутто, кг"),tx("Нетто, кг")],align:'llllllrrrr',boldLast:true,
         rows:sh.cars.map((c,i)=>{const s=carStats(c);return [i+1,c.plate,c.driver,c.route,c.material,c.arrival||'—',fmt(c.tare),s.n,fmt(s.gross),fmt(s.net)];}),
-        foot:['Итого','','','','','','',tot.trips,fmt(tot.gross),fmt(tot.net)]},
-      {title:'По материалам',head:['Материал','Машин','Рейсов','Нетто, кг'],align:'lrrr',boldLast:true,
+        foot:[tx("Итого"),'','','','','','',tot.trips,fmt(tot.gross),fmt(tot.net)]},
+      {title:tx("По материалам"),head:[tx("Материал"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lrrr',boldLast:true,
         rows:materialStats(sh).map(m=>[m.name,m.cars,m.trips,fmt(m.net)])},
-      {title:'Все рейсы',head:['№','Машина','Водитель','Маршрут','Материал','Время','Тара, кг','Брутто, кг','Нетто, кг'],align:'lllllrrrr',boldLast:true,rows:trips}
+      {title:tx("Все рейсы"),head:['№',tx("Машина"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Время"),tx("Тара, кг"),tx("Брутто, кг"),tx("Нетто, кг")],align:'lllllrrrr',boldLast:true,rows:trips}
     ]};
 }
 function periodDoc(list){
   const tot=list.reduce((a,sh)=>{const s=shiftStats(sh);a.cars+=s.cars;a.trips+=s.trips;a.net=r2(a.net+s.net);return a;},{cars:0,trips:0,net:0});
-  const grp=(title,h,pick)=>({title,head:[h,'Машин','Рейсов','Нетто, кг'],align:'lrrr',boldLast:true,rows:groupStats(list,pick).map(g=>[g.name,g.cars,g.trips,fmt(g.net)])});
-  return {title:'Сводка за период',orient:'l',
-    meta:[['С даты',S.sFrom?dateRu(S.sFrom):'начала'],['По дату',S.sTo?dateRu(S.sTo):'сегодня'],['Смен',list.length],['Машин',tot.cars],['Рейсов',tot.trips],['Нетто всего, т',fmt(tot.net/1000,1)]],
+  const grp=(title,h,pick)=>({title,head:[h,tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lrrr',boldLast:true,rows:groupStats(list,pick).map(g=>[g.name,g.cars,g.trips,fmt(g.net)])});
+  return {title:tx("Сводка за период"),orient:'l',
+    meta:[[tx("С даты"),S.sFrom?dateRu(S.sFrom):tx("начала")],[tx("По дату"),S.sTo?dateRu(S.sTo):tx("сегодня")],[tx("Смен"),list.length],[tx("Машин"),tot.cars],[tx("Рейсов"),tot.trips],[tx("Нетто всего, т"),fmt(tot.net/1000,1)]],
     tables:[
-      {title:'По сменам',head:['Дата','Смена','Оператор','Машин','Рейсов','Нетто, кг'],align:'lllrrr',boldLast:true,
+      {title:tx("По сменам"),head:[tx("Дата"),tx("Смена"),tx("Оператор"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lllrrr',boldLast:true,
         rows:list.map(sh=>{const s=shiftStats(sh);return [dateRu(sh.date),sh.shift,sh.operator,s.cars,s.trips,fmt(s.net)];}),
-        foot:['Итого','','',tot.cars,tot.trips,fmt(tot.net)]},
-      grp('По материалам','Материал',c=>c.material),
-      grp('По маршрутам','Маршрут',c=>c.route),
-      grp('По водителям','Водитель',c=>c.driver)
+        foot:[tx("Итого"),'','',tot.cars,tot.trips,fmt(tot.net)]},
+      grp(tx("По материалам"),tx("Материал"),c=>c.material),
+      grp(tx("По маршрутам"),tx("Маршрут"),c=>c.route),
+      grp(tx("По водителям"),tx("Водитель"),c=>c.driver)
     ]};
 }
 function docToTxt(doc){
   const cl=s=>String(s==null?'':s).replace(/[  ]/g,' ');
-  const L=[doc.title.toUpperCase(),'Автовесы · сформировано '+stamp(),''];
+  const L=[doc.title.toUpperCase(),'Tarazi · '+tx('сформировано')+' '+stamp(),''];
   const kw=Math.max(...doc.meta.map(m=>m[0].length));
   doc.meta.forEach(([k,v])=>L.push(k.padEnd(kw)+' : '+cl(v)));
   doc.tables.forEach(tb=>{
@@ -675,7 +721,7 @@ function drawItem(ctx,it,y,L){
   const hline=(yy,lw,col)=>{ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(M,yy);ctx.lineTo(M+cw,yy);ctx.stroke();};
   if(it.t==='title'){
     ctx.fillStyle=RC.ink;ctx.font='700 26px '+RF;ctx.fillText(it.text,M,y+28);
-    ctx.fillStyle=RC.mute;ctx.font='400 12px '+RF;ctx.fillText('Автовесы · сформировано '+stamp(),M,y+47);
+    ctx.fillStyle=RC.mute;ctx.font='400 12px '+RF;ctx.fillText('Tarazi · '+tx('сформировано')+' '+stamp(),M,y+47);
     hline(y+56,2,RC.ink);
   }else if(it.t==='meta'){
     it.pair.forEach((b,j)=>{
@@ -763,7 +809,7 @@ async function docToPdf(doc){
     const ctx=cv.getContext('2d');ctx.scale(sc,sc);ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,pw,ph);
     pages[i].forEach(p=>drawItem(ctx,p.it,p.y,L));
     ctx.fillStyle=RC.mute;ctx.font='400 11px '+RF;ctx.textBaseline='alphabetic';
-    ctx.textAlign='left';ctx.fillText('Автовесы',L.M,ph-22);
+    ctx.textAlign='left';ctx.fillText('Tarazi',L.M,ph-22);
     ctx.textAlign='right';ctx.fillText((i+1)+' / '+pages.length,pw-L.M,ph-22);
     const blob=await toBlob(cv,'image/jpeg',0.92);
     out.push({w:pw,h:ph,iw:cv.width,ih:cv.height,jpg:new Uint8Array(await blob.arrayBuffer())});
@@ -779,16 +825,16 @@ async function buildExportFile(fmt,o){
 async function deliver(name,data,text){
   if(!S.downloads){
     if(text!=null){closeModal();openExportFallback(name,text);}
-    else toast('В этом окне сохранение файлов недоступно. Откройте сайт в браузере.','err');
+    else toast(tx("В этом окне сохранение файлов недоступно. Откройте сайт в браузере."),'err');
     return false;
   }
-  try{await S.downloads.save({filename:name,data});toast('Файл сохранён: '+name);return true;}
+  try{await S.downloads.save({filename:name,data});toast(tx("Файл сохранён: ")+name);return true;}
   catch(e){
     const code=e&&e.code;
     if(code==='declined')return false;
-    if(code==='rate_limited'){toast('Подождите секунду и повторите.','err');return false;}
+    if(code==='rate_limited'){toast(tx("Подождите секунду и повторите."),'err');return false;}
     if(text!=null){closeModal();openExportFallback(name,text);}
-    else toast('Не удалось сохранить файл.','err');
+    else toast(tx("Не удалось сохранить файл."),'err');
     return false;
   }
 }
@@ -797,31 +843,32 @@ async function runExport(fmt){
   st.busy=true;
   const btns=[...$modal.querySelectorAll('.xbtn')],msg=document.getElementById('x-status');
   btns.forEach(b=>{b.disabled=true;});
-  if(msg){msg.textContent='Готовлю файл…';msg.hidden=false;}
+  if(msg){msg.textContent=tx("Готовлю файл…");msg.hidden=false;}
   try{
     const f=await buildExportFile(fmt,o);
     if(S.modal!==st)return;
     const ok=await deliver(f.name,f.data,f.text);
     if(ok&&S.modal===st)closeModal();
-  }catch(e){toast('Не удалось подготовить файл. Попробуйте другой формат.','err');}
+  }catch(e){toast(tx("Не удалось подготовить файл. Попробуйте другой формат."),'err');}
   finally{st.busy=false;if(S.modal===st){btns.forEach(b=>{b.disabled=false;});if(msg)msg.hidden=true;}}
 }
 function openExport(o){
-  const fm=[['pdf','PDF','Для печати и отправки'],['png','PNG','Картинка для мессенджера'],['txt','TXT','Простой текст'],['csv','CSV','Таблица для Excel']];
+  const fm=[['pdf','PDF',tx("Для печати и отправки")],['png','PNG',tx("Картинка для мессенджера")],['txt','TXT',tx("Простой текст")],['csv','CSV',tx("Таблица для Excel")]];
   const html=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
-    <h2 id="dlg-title" class="dlg-title">Скачать отчёт</h2><p class="dlg-text">${esc(o.sub)}</p>
+    <h2 id="dlg-title" class="dlg-title">${tx("Скачать отчёт")}</h2><p class="dlg-text">${esc(o.sub)}</p>
     <div class="xgrid">${fm.map(f=>`<button type="button" class="xbtn" data-act="export-go" data-fmt="${f[0]}"><b>${f[1]}</b><span>${f[2]}</span></button>`).join('')}</div>
     <p class="dlg-note" id="x-status" hidden></p>
-    <div class="dlg-actions"><button type="button" class="btn" data-act="modal-close">Закрыть</button></div></div></div>`;
+    <div class="dlg-actions"><button type="button" class="btn" data-act="modal-close">${tx("Закрыть")}</button></div></div></div>`;
   showModal(html,{exp:o,focus:'.xbtn'});
 }
 
 /* ---------- views ---------- */
-function note(){return S.mode==='local'?'<p class="note">Общее хранилище недоступно. Данные сохраняются только в этом браузере.</p>':'';}
+const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+function note(){return S.mode==='local'&&!IS_NATIVE?tx("<p class=\"note\">Общее хранилище недоступно. Данные сохраняются только в этом браузере.</p>"):'';}
 const appbar=(l,r)=>`<header class="appbar"><div class="appbar__l">${l}</div><div class="appbar__r">${r}</div></header>`;
 const sq=(act,ic,label,extra,cls)=>`<button class="sq${cls?' '+cls:''}" data-act="${act}"${extra||''} aria-label="${esc(label)}">${icon(ic)}</button>`;
-const THEME_NAME={light:'светлая',dark:'тёмная',auto:'как в системе'};
-function themeBtn(){return sq('theme',S.theme==='light'?'sun':S.theme==='dark'?'moon':'contrast','Тема: '+THEME_NAME[S.theme]+'. Нажмите, чтобы сменить');}
+const THEME_NAME={get light(){return tx("светлая");},get dark(){return tx("тёмная");},get auto(){return tx("как в системе");}};
+function themeBtn(){return sq('theme',S.theme==='light'?'sun':S.theme==='dark'?'moon':'contrast',tx("Тема: ")+THEME_NAME[S.theme]+tx(". Нажмите, чтобы сменить"));}
 
 function viewHome(){
   const q=S.search.trim().toLowerCase();
@@ -834,34 +881,34 @@ function viewHome(){
     return `<a class="card scard" href="#shift-${esc(sh.id)}" data-act="open" data-id="${esc(sh.id)}">
       <div class="scard__top"><span class="tile">${icon('cal')}</span>
         <div class="scard__main"><div class="scard__date">${esc(dateLong(sh.date))}</div><div class="scard__sub">${esc(sh.shift)}</div></div>
-        <span class="badge${open?' badge--ok':''}">${open?'Активна':'Закрыта'}</span></div>
-      <div class="scard__foot"><span>${icon('user','ic--sm')}${esc(sh.operator)}</span><span>${icon('truck','ic--sm')}${t.cars} ${plural(t.cars,['машина','машины','машин'])}</span><span>${icon('box','ic--sm')}${fmt(t.net/1000,1)} т</span></div>
+        <span class="badge${open?' badge--ok':''}">${open?tx("Активна"):tx("Закрыта")}</span></div>
+      <div class="scard__foot"><span>${icon('user','ic--sm')}${esc(sh.operator)}</span><span>${icon('truck','ic--sm')}${t.cars} ${plural(t.cars,[tx("машина"),tx("машины"),tx("машин")])}</span><span>${icon('box','ic--sm')}${fmt(t.net/1000,1)} ${tx("т")}</span></div>
     </a>`;}).join('');
   let body;
-  if(!all.length)body=`<div class="empty"><p>Смен пока нет. Создайте проект на смену: дата, смена и оператор автовесов.</p><button class="btn btn--primary" data-act="shift-new">${icon('plus','ic--sm')}Создать смену</button></div>`;
-  else if(!list.length)body=`<div class="empty"><p>${q?'Ничего не найдено.':'В этой категории смен пока нет.'}</p></div>`;
-  else body=`<section class="scards" aria-label="Список смен">${cards}</section>`;
-  return appbar(`<span class="tile logo-tile">${icon('scale')}</span><span class="logo">Автовесы</span>`,
-      sq('stats','chart','Сводка за период')+sq('glossary','book','Справочник')+themeBtn()+sq('shift-new','plus','Новая смена','','sq--navy'))
+  if(!all.length)body=`<div class="empty"><p>${tx("Смен пока нет. Создайте проект на смену: дата, смена и оператор автовесов.")}</p><button class="btn btn--primary" data-act="shift-new">${icon('plus','ic--sm')}${tx("Создать смену")}</button></div>`;
+  else if(!list.length)body=`<div class="empty"><p>${q?tx("Ничего не найдено."):tx("В этой категории смен пока нет.")}</p></div>`;
+  else body=`<section class="scards" aria-label="${tx("Список смен")}">${cards}</section>`;
+  return appbar(`<span class="tile logo-tile">${icon('scale')}</span><span class="logo">Tarazi</span>`,
+      sq('stats','chart',tx("Сводка за период"))+sq('glossary','book',tx("Справочник"))+sq('settings','gear',tx("Настройки"))+sq('shift-new','plus',tx("Новая смена"),'','sq--navy'))
     +note()
-    +`<div class="pills" role="tablist" aria-label="Тип смены">
-      <button class="pill${S.homeType==='night'?' is-on':''}" role="tab" aria-selected="${S.homeType==='night'}" data-act="htype" data-type="night">${icon('moon','ic--sm')}Ночная смена</button>
-      <button class="pill${S.homeType==='day'?' is-on':''}" role="tab" aria-selected="${S.homeType==='day'}" data-act="htype" data-type="day">${icon('sun','ic--sm')}Дневная смена</button></div>
-    <div class="search">${icon('search')}<input class="inp" id="hsearch" type="search" placeholder="Поиск по дате или оператору…" value="${esc(S.search)}" data-search="1" autocomplete="off" aria-label="Поиск по дате или оператору"></div>
+    +`<div class="pills" role="tablist" aria-label="${tx("Тип смены")}">
+      <button class="pill${S.homeType==='night'?' is-on':''}" role="tab" aria-selected="${S.homeType==='night'}" data-act="htype" data-type="night">${icon('moon','ic--sm')}${tx("Ночная смена")}</button>
+      <button class="pill${S.homeType==='day'?' is-on':''}" role="tab" aria-selected="${S.homeType==='day'}" data-act="htype" data-type="day">${icon('sun','ic--sm')}${tx("Дневная смена")}</button></div>
+    <div class="search">${icon('search')}<input class="inp" id="hsearch" type="search" placeholder="${tx("Поиск по дате или оператору…")}" value="${esc(S.search)}" data-search="1" autocomplete="off" aria-label="${tx("Поиск по дате или оператору")}"></div>
     ${body}`;
 }
 
 function summaryHtml(sh){
-  if(!sh.cars.length)return '<p class="lead">Добавьте машины, и здесь появится общий расчёт.</p>';
+  if(!sh.cars.length)return tx("<p class=\"lead\">Добавьте машины, и здесь появится общий расчёт.</p>");
   const tot=shiftStats(sh);
   const rows=sh.cars.map((c,i)=>{const s=carStats(c);
     return `<tr><td>${i+1}</td><td class="mono"><span class="dot" style="background:${colorHex(c.color)}"></span>${esc(c.plate)}</td><td>${esc(c.driver)}</td><td>${esc(c.route)}</td><td>${esc(c.material)}</td><td class="r mono">${s.n}</td><td class="r mono net${s.net<0?' is-bad':''}">${fmt(s.net)}</td></tr>`;}).join('');
   const mats=materialStats(sh).map(m=>`<tr><td>${esc(m.name)}</td><td class="r mono">${m.cars}</td><td class="r mono">${m.trips}</td><td class="r mono net">${fmt(m.net)}</td></tr>`).join('');
-  return `<div class="box scroll"><table class="tbl tbl--sum"><thead><tr><th>№</th><th>Машина</th><th>Водитель</th><th>Маршрут</th><th>Материал</th><th class="r">Рейсов</th><th class="r">Нетто, кг</th></tr></thead>
+  return `<div class="box scroll"><table class="tbl tbl--sum tbl--stack"><thead><tr><th>№</th><th>${tx("Машина")}</th><th>${tx("Водитель")}</th><th>${tx("Маршрут")}</th><th>${tx("Материал")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead>
     <tbody>${rows}</tbody>
-    <tfoot><tr><td colspan="5">Итого за смену</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>
-    <h3>По материалам</h3>
-    <div class="box scroll"><table class="tbl"><thead><tr><th>Материал</th><th class="r">Машин</th><th class="r">Рейсов</th><th class="r">Нетто, кг</th></tr></thead><tbody>${mats}</tbody></table></div>`;
+    <tfoot><tr><td colspan="5">${tx("Итого за смену")}</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>
+    <h3>${tx("По материалам")}</h3>
+    <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Материал")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${mats}</tbody></table></div>`;
 }
 function carCard(sh,c){
   const s=carStats(c),hex=colorHex(c.color);
@@ -869,8 +916,8 @@ function carCard(sh,c){
     <div class="ccard__top"><span class="tile tile--car" style="background:${hex}">${icon('truck')}</span>
       <div class="ccard__id"><div class="ccard__line"><span class="ccard__name">${esc(plateLabel(c.plate))}</span><span class="ccard__route">${esc(c.route)}</span></div>
         <div class="ccard__driver">${esc(c.driver)}</div></div></div>
-    <div class="ccard__net"><span class="muted">Итого НЕТТО</span><b class="mono${s.net<0?' is-bad':''}">${fmt(s.net)} кг</b></div>
-    <div class="ccard__foot"><span class="chip">${s.n} ${plural(s.n,['рейс','рейса','рейсов'])}</span></div>
+    <div class="ccard__net"><span class="muted">${tx("Итого НЕТТО")}</span><b class="mono${s.net<0?' is-bad':''}">${fmt(s.net)} ${tx("кг")}</b></div>
+    <div class="ccard__foot"><span class="chip">${s.n} ${plural(s.n,[tx("рейс"),tx("рейса"),tx("рейсов")])}</span></div>
   </a>`;
 }
 function viewShift(sh){
@@ -878,36 +925,36 @@ function viewShift(sh){
   const cq=S.carQuery.trim().toLowerCase();
   const vis=cq?sh.cars.filter(c=>[c.driver,c.plate,c.route,c.material].join(' ').toLowerCase().includes(cq)):sh.cars;
   const groups=new Map();
-  vis.forEach(c=>{const k=c.route||'Без маршрута';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);});
-  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span>${esc(route)}</span><span class="chip">${cars.length} маш.</span></div>${cars.map(c=>carCard(sh,c)).join('')}`).join('');
-  const copyBtn=prev?`<button class="btn btn--ghost btn--sm" data-act="cars-copy">${icon('copy','ic--sm')}Копировать из прошлой смены</button>`:'';
+  vis.forEach(c=>{const k=c.route||tx("Без маршрута");if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);});
+  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span>${esc(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span></div>${cars.map(c=>carCard(sh,c)).join('')}`).join('');
+  const copyBtn=prev?`<button class="btn btn--ghost btn--sm" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:'';
   let list;
-  if(!sh.cars.length)list=`<div class="empty"><p>В этой смене пока нет машин. Для каждой машины создаётся свой бланк.</p><div class="row-btns"><button class="btn btn--primary" data-act="car-new">${icon('plus','ic--sm')}Добавить машину</button>${prev?`<button class="btn" data-act="cars-copy">${icon('copy','ic--sm')}Копировать из прошлой смены</button>`:''}</div></div>`;
-  else if(!vis.length)list='<div class="empty"><p>Ничего не найдено.</p></div>';
+  if(!sh.cars.length)list=`<div class="empty"><p>${tx("В этой смене пока нет машин. Для каждой машины создаётся свой бланк.")}</p><div class="row-btns"><button class="btn btn--primary" data-act="car-new">${icon('plus','ic--sm')}${tx("Добавить машину")}</button>${prev?`<button class="btn" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:''}</div></div>`;
+  else if(!vis.length)list=tx("<div class=\"empty\"><p>Ничего не найдено.</p></div>");
   else list=carsHtml;
-  return appbar(sq('home','back','Все смены','','sq--ghost'),sq('shift-report','down','Скачать общий расчёт')+sq('car-new','plus','Добавить машину','','sq--navy'))
+  return appbar(sq('home','back',tx("Все смены"),'','sq--ghost'),sq('shift-report','down',tx("Скачать общий расчёт"))+sq('car-new','plus',tx("Добавить машину"),'','sq--navy'))
     +note()
     +`<section class="card shiftcard">
       <div class="shiftcard__top"><span class="tile">${icon('cal')}</span><div><h1>${esc(dateLong(sh.date))}</h1><div class="muted" style="font-size:15px">${esc(sh.shift)}</div></div></div>
-      <div class="shiftcard__st"><span class="badge${open?' badge--ok':''}">${open?'Активна':'Закрыта'}</span><button class="ibtn" data-act="shift-edit" aria-label="Изменить смену">${icon('edit','ic--sm')}</button><button class="btn btn--sm" data-act="shift-toggle">${open?'Закрыть смену':'Открыть снова'}</button></div>
-      <div class="shiftcard__row">${icon('user')}<span>Оператор: ${esc(sh.operator)}</span></div>
+      <div class="shiftcard__st"><span class="badge${open?' badge--ok':''}">${open?tx("Активна"):tx("Закрыта")}</span><button class="ibtn" data-act="shift-edit" aria-label="${tx("Изменить смену")}">${icon('edit','ic--sm')}</button><button class="btn btn--sm" data-act="shift-toggle">${open?tx("Закрыть смену"):tx("Открыть снова")}</button></div>
+      <div class="shiftcard__row">${icon('user')}<span>${tx("Оператор:")} ${esc(sh.operator)}</span></div>
       <div class="tiles">
-        <div class="tcell">${icon('truck')}<div class="tcell__v">${t.cars}</div><div class="tcell__l">${plural(t.cars,['Машина','Машины','Машин'])}</div></div>
-        <div class="tcell">${icon('scale')}<div class="tcell__v">${t.trips}</div><div class="tcell__l">${plural(t.trips,['Рейс','Рейса','Рейсов'])}</div></div>
-        <div class="tcell">${icon('box')}<div class="tcell__v mono">${fmt(t.net)}</div><div class="tcell__l">кг НЕТТО</div></div>
+        <div class="tcell">${icon('truck')}<div class="tcell__v">${t.cars}</div><div class="tcell__l">${plural(t.cars,[tx("Машина"),tx("Машины"),tx("Машин")])}</div></div>
+        <div class="tcell">${icon('scale')}<div class="tcell__v">${t.trips}</div><div class="tcell__l">${plural(t.trips,[tx("Рейс"),tx("Рейса"),tx("Рейсов")])}</div></div>
+        <div class="tcell">${icon('box')}<div class="tcell__v mono">${fmt(t.net)}</div><div class="tcell__l">${tx("кг НЕТТО")}</div></div>
       </div>
-      <div class="shiftcard__acts"><button class="btn btn--sm" data-act="shift-copy">${icon('copy','ic--sm')}Создать копию смены</button></div></section>
-    <div class="sect"><h2>Машины (${t.cars})</h2>${sh.cars.length?copyBtn:''}</div>
-    ${sh.cars.length>=5?`<div class="search" style="margin-top:0">${icon('search')}<input class="inp" id="csearch" type="search" placeholder="Найти машину, водителя, маршрут…" value="${esc(S.carQuery)}" data-csearch="1" autocomplete="off" aria-label="Поиск машины"></div>`:''}
+      <div class="shiftcard__acts"><button class="btn btn--sm" data-act="shift-copy">${icon('copy','ic--sm')}${tx("Создать копию смены")}</button></div></section>
+    <div class="sect"><h2>${tx('Машины')} (${t.cars})</h2>${sh.cars.length?copyBtn:''}</div>
+    ${sh.cars.length>=5?`<div class="search" style="margin-top:0">${icon('search')}<input class="inp" id="csearch" type="search" placeholder="${tx("Найти машину, водителя, маршрут…")}" value="${esc(S.carQuery)}" data-csearch="1" autocomplete="off" aria-label="${tx("Поиск машины")}"></div>`:''}
     ${list}
-    <section class="summary"><h2>Общий расчёт за смену</h2><div>${summaryHtml(sh)}</div></section>`;
+    <section class="summary"><h2>${tx("Общий расчёт за смену")}</h2><div>${summaryHtml(sh)}</div></section>`;
 }
 
 function calcHtml(car,raw){
   const g=parseNum(raw);
   if(isNaN(g)||g<=0)return '';
   const n=r2(g-car.tare);
-  return `<span class="calc__label">НЕТТО:</span><span class="calc__val mono${n<0?' is-bad':''}">${fmt(n)} кг</span>${n<0?'<span class="calc__warn">Брутто меньше тары. Проверьте вес.</span>':''}`;
+  return `<span class="calc__label">${tx("НЕТТО:")}</span><span class="calc__val mono${n<0?' is-bad':''}">${fmt(n)} ${tx("кг")}</span>${n<0?tx("<span class=\"calc__warn\">Брутто меньше тары. Проверьте вес.</span>"):''}`;
 }
 function viewCar(sh,c){
   const s=carStats(c),hex=colorHex(c.color);
@@ -916,107 +963,128 @@ function viewCar(sh,c){
     return `<tr>
       <td class="mono">${i+1}</td><td class="mono">${esc(t.time)}</td><td class="mono">${fmt(t.gross)}</td>
       <td class="r mono net${net<0?' is-bad':''}">${fmt(net)}</td>
-      <td class="acts"><button class="ibtn" data-act="trip-edit" data-trip="${esc(t.id)}" aria-label="Изменить рейс ${i+1}">${icon('edit','ic--sm')}</button><button class="ibtn ibtn--danger" data-act="trip-delete" data-trip="${esc(t.id)}" aria-label="Удалить рейс ${i+1}">${icon('trash','ic--sm')}</button></td>
+      <td class="acts"><button class="ibtn" data-act="trip-edit" data-trip="${esc(t.id)}" aria-label="${tx("Изменить рейс")} ${i+1}">${icon('edit','ic--sm')}</button><button class="ibtn ibtn--danger" data-act="trip-delete" data-trip="${esc(t.id)}" aria-label="${tx("Удалить рейс")} ${i+1}">${icon('trash','ic--sm')}</button></td>
     </tr>`;}).join('');
   const tv=S.drafts['t-'+c.id];
   const timeVal=tv!=null?tv:nowHM();
   const gv=S.drafts[c.id]||'';
   const g=parseNum(gv),idle=isNaN(g)||g<=0;
-  const avg=s.n?` · в среднем ${fmt(s.net/s.n,0)} кг за рейс`:'';
-  return appbar(sq('back-shift','back','Назад к смене','','sq--ghost'),sq('car-report','down','Скачать отчёт по машине',' data-car="'+esc(c.id)+'"'))
-    +(sh.status==='closed'?'<p class="note">Смена закрыта. Рейсы можно добавлять и править, статус меняется на экране смены.</p>':'')
+  const avg=s.n?` · ${tx('в среднем {a} кг за рейс',{a:fmt(s.net/s.n,0)})}`:'';
+  return appbar(sq('back-shift','back',tx("Назад к смене"),'','sq--ghost'),sq('car-report','down',tx("Скачать отчёт по машине"),' data-car="'+esc(c.id)+'"'))
+    +(sh.status==='closed'?tx("<p class=\"note\">Смена закрыта. Рейсы можно добавлять и править, статус меняется на экране смены.</p>"):'')
     +`<section class="card carcard" style="--car:${colorHex(c.color)}">
       <div class="carcard__top"><span class="tile tile--car" style="background:${hex}">${icon('truck')}</span>
-        <div class="carcard__id"><div class="carcard__name">${esc(c.driver)}</div><div class="muted">${esc(plateLabel(c.plate))} · Прибытие: ${esc(c.arrival||'—')}</div></div>
-        <button class="ibtn" data-act="car-edit" data-car="${esc(c.id)}" aria-label="Изменить машину">${icon('edit')}</button></div>
+        <div class="carcard__id"><div class="carcard__name">${esc(c.driver)}</div><div class="muted">${esc(plateLabel(c.plate))} ${tx("· Прибытие:")} ${esc(c.arrival||'—')}</div></div>
+        <button class="ibtn" data-act="car-edit" data-car="${esc(c.id)}" aria-label="${tx("Изменить машину")}">${icon('edit')}</button></div>
       <ul class="facts">
         <li>${icon('pin','ic--sm')}<span>${esc(c.route)}</span></li>
         <li>${icon('box','ic--sm')}<span>${esc(c.material)}</span></li>
-        <li>${icon('scale','ic--sm')}<span>Тара: ${fmt(c.tare)} кг</span></li>
-        <li>${icon('truck','ic--sm')}<span>${s.n} ${plural(s.n,['рейс','рейса','рейсов'])}</span></li>
+        <li>${icon('scale','ic--sm')}<span>${tx("Тара:")} ${fmt(c.tare)} ${tx("кг")}</span></li>
+        <li>${icon('truck','ic--sm')}<span>${s.n} ${plural(s.n,[tx("рейс"),tx("рейса"),tx("рейсов")])}</span></li>
       </ul>
-      <div class="netbox"><div class="netbox__label">Общий вес НЕТТО</div>
-        <div class="netbox__val mono">${fmt(s.net)} кг</div>
-        <div class="netbox__sub">${fmt(s.net/1000,3)} т${avg}</div></div>
+      <div class="netbox"><div class="netbox__label">${tx("Общий вес НЕТТО")}</div>
+        <div class="netbox__val mono">${fmt(s.net)} ${tx("кг")}</div>
+        <div class="netbox__sub">${fmt(s.net/1000,3)} ${tx("т")}${avg}</div></div>
     </section>
-    <section class="weigh" aria-label="Новое взвешивание">
-      <h2>Новое взвешивание</h2>
-      <input class="inp inp--xl mono" id="w-gross" inputmode="decimal" placeholder="Вес БРУТТО (кг)" aria-label="Вес брутто, кг" value="${esc(gv)}" data-draft="${esc(c.id)}" data-enter="trip-add" data-car="${esc(c.id)}" autocomplete="off">
+    <section class="weigh" aria-label="${tx("Новое взвешивание")}">
+      <h2>${tx("Новое взвешивание")}</h2>
+      <input class="inp inp--xl mono" id="w-gross" inputmode="decimal" placeholder="${tx("Вес БРУТТО (кг)")}" aria-label="${tx("Вес брутто, кг")}" value="${esc(gv)}" data-draft="${esc(c.id)}" data-enter="trip-add" data-car="${esc(c.id)}" autocomplete="off">
       <div class="calc" id="w-calc">${calcHtml(c,gv)}</div>
-      <input class="inp mono" id="w-time" type="text" inputmode="numeric" maxlength="5" placeholder="ЧЧ:ММ" data-time="1" aria-label="Время взвешивания, цифрами" value="${esc(timeVal)}" data-draft="t-${esc(c.id)}" data-enter="trip-add" data-car="${esc(c.id)}">
-      <button class="btn btn--add${idle?' is-idle':''}" id="w-add" data-act="trip-add" data-car="${esc(c.id)}" aria-label="Записать рейс">+</button>
+      <input class="inp mono" id="w-time" type="text" inputmode="numeric" maxlength="5" placeholder="${tx("ЧЧ:ММ")}" data-time="1" aria-label="${tx("Время взвешивания, цифрами")}" value="${esc(timeVal)}" data-draft="t-${esc(c.id)}" data-enter="trip-add" data-car="${esc(c.id)}">
+      <button class="btn btn--add${idle?' is-idle':''}" id="w-add" data-act="trip-add" data-car="${esc(c.id)}" aria-label="${tx("Записать рейс")}">+</button>
     </section>
-    <section class="card trips" aria-label="Рейсы">
-      <div class="trips__head"><h2>Рейсы</h2><span class="muted">${s.n} ${plural(s.n,['рейс','рейса','рейсов'])}</span></div>
+    <section class="card trips" aria-label="${tx("Рейсы")}">
+      <div class="trips__head"><h2>${tx("Рейсы")}</h2><span class="muted">${s.n} ${plural(s.n,[tx("рейс"),tx("рейса"),tx("рейсов")])}</span></div>
       <div class="scroll"><table class="tbl tbl--trips">
-        <thead><tr><th>№</th><th>Время</th><th>БРУТТО</th><th class="r">НЕТТО</th><th></th></tr></thead>
-        <tbody>${trips||'<tr><td colspan="5" class="td-empty">Рейсов пока нет. Введите вес брутто после взвешивания.</td></tr>'}</tbody>
-        <tfoot><tr><td colspan="2">Итого</td><td class="mono">${fmt(s.gross)}</td><td class="r mono net${s.net<0?' is-bad':''}">${fmt(s.net)}</td><td></td></tr></tfoot>
+        <thead><tr><th>№</th><th>${tx("Время")}</th><th>${tx("БРУТТО")}</th><th class="r">${tx("НЕТТО")}</th><th></th></tr></thead>
+        <tbody>${trips||tx("<tr><td colspan=\"5\" class=\"td-empty\">Рейсов пока нет. Введите вес брутто после взвешивания.</td></tr>")}</tbody>
+        <tfoot><tr><td colspan="2">${tx("Итого")}</td><td class="mono">${fmt(s.gross)}</td><td class="r mono net${s.net<0?' is-bad':''}">${fmt(s.net)}</td><td></td></tr></tfoot>
       </table></div>
     </section>`;
 }
 function perTable(title,h,rows){
   if(!rows.length)return '';
-  return `<h2 class="sect2">${title}</h2><div class="box scroll"><table class="tbl tbl--per"><thead><tr><th>${h}</th><th class="r">Машин</th><th class="r">Рейсов</th><th class="r">Нетто, кг</th></tr></thead><tbody>${rows.map(g=>`<tr><td>${esc(g.name)}</td><td class="r mono">${g.cars}</td><td class="r mono">${g.trips}</td><td class="r mono net">${fmt(g.net)}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<h2 class="sect2">${title}</h2><div class="box scroll"><table class="tbl tbl--per tbl--stack"><thead><tr><th>${h}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${rows.map(g=>`<tr><td>${esc(g.name)}</td><td class="r mono">${g.cars}</td><td class="r mono">${g.trips}</td><td class="r mono net">${fmt(g.net)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function viewStats(){
   const list=periodShifts();
   const tot=list.reduce((a,sh)=>{const s=shiftStats(sh);a.cars+=s.cars;a.trips+=s.trips;a.net=r2(a.net+s.net);return a;},{cars:0,trips:0,net:0});
   const rows=list.map(sh=>{const s=shiftStats(sh);
     return `<tr><td>${esc(dateRu(sh.date))}</td><td>${esc(sh.shift)}</td><td>${esc(sh.operator)}</td><td class="r mono">${s.cars}</td><td class="r mono">${s.trips}</td><td class="r mono net">${fmt(s.net)}</td></tr>`;}).join('');
-  return appbar(sq('home','back','Все смены','','sq--ghost'),sq('stats-report','down','Скачать сводку'))
-    +`<h1>Сводка за период</h1>
-    <p class="lead">Итоги по сменам, материалам, маршрутам и водителям. Отчёт выгружается в CSV для Excel.</p>
+  return appbar(sq('home','back',tx("Все смены"),'','sq--ghost'),sq('stats-report','down',tx("Скачать сводку")))
+    +`<h1>${tx("Сводка за период")}</h1>
+    <p class="lead">${tx("Итоги по сменам, материалам, маршрутам и водителям. Отчёт выгружается в CSV для Excel.")}</p>
     <div class="range">
-      <div class="field"><label for="sfrom">С даты</label><input class="inp" id="sfrom" type="date" value="${esc(S.sFrom)}" data-stat="from"></div>
-      <div class="field"><label for="sto">По дату</label><input class="inp" id="sto" type="date" value="${esc(S.sTo)}" data-stat="to"></div>
+      <div class="field"><label for="sfrom">${tx("С даты")}</label><input class="inp" id="sfrom" type="date" value="${esc(S.sFrom)}" data-stat="from"></div>
+      <div class="field"><label for="sto">${tx("По дату")}</label><input class="inp" id="sto" type="date" value="${esc(S.sTo)}" data-stat="to"></div>
     </div>
-    <div class="chips"><button class="btn btn--sm" data-act="range" data-range="week">7 дней</button><button class="btn btn--sm" data-act="range" data-range="month">Этот месяц</button><button class="btn btn--sm" data-act="range" data-range="all">Всё время</button></div>
+    <div class="chips"><button class="btn btn--sm" data-act="range" data-range="week">${tx("7 дней")}</button><button class="btn btn--sm" data-act="range" data-range="month">${tx("Этот месяц")}</button><button class="btn btn--sm" data-act="range" data-range="all">${tx("Всё время")}</button></div>
     <div class="tiles tiles--4">
-      <div class="tcell">${icon('cal')}<div class="tcell__v">${list.length}</div><div class="tcell__l">${plural(list.length,['Смена','Смены','Смен'])}</div></div>
-      <div class="tcell">${icon('truck')}<div class="tcell__v">${tot.cars}</div><div class="tcell__l">${plural(tot.cars,['Машина','Машины','Машин'])}</div></div>
-      <div class="tcell">${icon('scale')}<div class="tcell__v">${tot.trips}</div><div class="tcell__l">${plural(tot.trips,['Рейс','Рейса','Рейсов'])}</div></div>
-      <div class="tcell">${icon('box')}<div class="tcell__v mono">${fmt(tot.net/1000,1)}</div><div class="tcell__l">т НЕТТО</div></div>
+      <div class="tcell">${icon('cal')}<div class="tcell__v">${list.length}</div><div class="tcell__l">${plural(list.length,[tx("Смена"),tx("Смены"),tx("Смен")])}</div></div>
+      <div class="tcell">${icon('truck')}<div class="tcell__v">${tot.cars}</div><div class="tcell__l">${plural(tot.cars,[tx("Машина"),tx("Машины"),tx("Машин")])}</div></div>
+      <div class="tcell">${icon('scale')}<div class="tcell__v">${tot.trips}</div><div class="tcell__l">${plural(tot.trips,[tx("Рейс"),tx("Рейса"),tx("Рейсов")])}</div></div>
+      <div class="tcell">${icon('box')}<div class="tcell__v mono">${fmt(tot.net/1000,1)}</div><div class="tcell__l">${tx("т НЕТТО")}</div></div>
     </div>
-    ${list.length?`<h2 class="sect2">По сменам</h2><div class="box scroll"><table class="tbl tbl--sum"><thead><tr><th>Дата</th><th>Смена</th><th>Оператор</th><th class="r">Машин</th><th class="r">Рейсов</th><th class="r">Нетто, кг</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="3">Итого</td><td class="r mono">${tot.cars}</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>`
-      :'<div class="empty"><p>За выбранный период смен нет.</p></div>'}
-    ${perTable('По материалам','Материал',groupStats(list,c=>c.material))}
-    ${perTable('По маршрутам','Маршрут',groupStats(list,c=>c.route))}
-    ${perTable('По водителям','Водитель',groupStats(list,c=>c.driver))}
-    <h2 class="sect2">Резервная копия</h2>
-    <p class="lead" style="margin-top:0">Все смены и справочник одним файлом JSON. Храните его на случай, если данные понадобятся вне сайта.</p>
-    <div style="margin-top:12px"><button class="btn" data-act="backup">${icon('down','ic--sm')}Скачать резервную копию</button></div>`;
+    ${list.length?`<h2 class="sect2">${tx("По сменам")}</h2><div class="box scroll"><table class="tbl tbl--sum tbl--stack"><thead><tr><th>${tx("Дата")}</th><th>${tx("Смена")}</th><th>${tx("Оператор")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="3">${tx("Итого")}</td><td class="r mono">${tot.cars}</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>`
+      :tx("<div class=\"empty\"><p>За выбранный период смен нет.</p></div>")}
+    ${perTable(tx("По материалам"),tx("Материал"),groupStats(list,c=>c.material))}
+    ${perTable(tx("По маршрутам"),tx("Маршрут"),groupStats(list,c=>c.route))}
+    ${perTable(tx("По водителям"),tx("Водитель"),groupStats(list,c=>c.driver))}
+    <h2 class="sect2">${tx("Резервная копия")}</h2>
+    <p class="lead" style="margin-top:0">${tx("Все смены и справочник одним файлом JSON. Храните его на случай, если данные понадобятся вне сайта.")}</p>
+    <div style="margin-top:12px"><button class="btn" data-act="backup">${icon('down','ic--sm')}${tx("Скачать резервную копию")}</button></div>`;
 }
 function viewGlossary(){
   const cat=CATS.find(c=>c.id===S.gcat)||CATS[0];
-  const items=S.glossary[cat.id].slice().sort((a,b)=>a.name.localeCompare(b.name,'ru'));
+  const items=S.glossary[cat.id].slice().sort((a,b)=>a.name.localeCompare(b.name,LOC()));
   const q=S.gfilter.trim().toLowerCase();
   const shown=q?items.filter(x=>x.name.toLowerCase().includes(q)):items;
   const miss=missingFromShifts();
   const tabs=CATS.map(c=>`<button class="tab${c.id===cat.id?' is-on':''}" role="tab" aria-selected="${c.id===cat.id}" data-act="gtab" data-cat="${c.id}">${c.label}<span class="tab__n">${S.glossary[c.id].length}</span></button>`).join('');
   const lis=shown.map(it=>{
     const n=usageCount(cat.id,it.name);
-    const use=n?`${n} ${cat.id==='operators'?plural(n,['смена','смены','смен']):plural(n,['бланк','бланка','бланков'])}`:'не используется';
+    const use=n?`${n} ${cat.id==='operators'?plural(n,[tx("смена"),tx("смены"),tx("смен")]):plural(n,[tx("бланк"),tx("бланка"),tx("бланков")])}`:tx("не используется");
     return `<li class="gitem"><span class="gitem__name${cat.id==='vehicles'?' mono':''}">${esc(it.name)}</span><span class="gitem__use">${use}</span>
-      <span class="gitem__act"><button class="ibtn" data-act="gloss-edit" data-id="${esc(it.id)}" aria-label="Изменить ${esc(it.name)}">${icon('edit','ic--sm')}</button><button class="ibtn ibtn--danger" data-act="gloss-delete" data-id="${esc(it.id)}" aria-label="Удалить ${esc(it.name)}">${icon('trash','ic--sm')}</button></span></li>`;}).join('');
-  return appbar(sq('home','back','Все смены','','sq--ghost'),'')
-    +`<h1>Справочник</h1>
-    <p class="lead">Эти значения выбираются из списка при создании смены и бланка машины. Новое значение можно добавить и прямо в форме.</p>
-    <div class="tabs" role="tablist" aria-label="Разделы справочника">${tabs}</div>
+      <span class="gitem__act"><button class="ibtn" data-act="gloss-edit" data-id="${esc(it.id)}" aria-label="${tx("Изменить")} ${esc(it.name)}">${icon('edit','ic--sm')}</button><button class="ibtn ibtn--danger" data-act="gloss-delete" data-id="${esc(it.id)}" aria-label="${tx("Удалить")} ${esc(it.name)}">${icon('trash','ic--sm')}</button></span></li>`;}).join('');
+  return appbar(sq('home','back',tx("Все смены"),'','sq--ghost'),'')
+    +`<h1>${tx("Справочник")}</h1>
+    <p class="lead">${tx("Эти значения выбираются из списка при создании смены и бланка машины. Новое значение можно добавить и прямо в форме.")}</p>
+    <div class="tabs" role="tablist" aria-label="${tx("Разделы справочника")}">${tabs}</div>
     <div class="addrow">
-      <input class="inp${cat.id==='vehicles'?' mono':''}" id="gnew" placeholder="${esc(cat.ph)}" value="${esc(S.drafts['g-'+cat.id]||'')}" data-draft="g-${cat.id}" data-enter="gloss-add" autocomplete="off" aria-label="Новое значение, раздел ${esc(cat.label)}">
-      <button class="btn btn--primary" data-act="gloss-add">Добавить</button>
+      <input class="inp${cat.id==='vehicles'?' mono':''}" id="gnew" placeholder="${esc(cat.ph)}" value="${esc(S.drafts['g-'+cat.id]||'')}" data-draft="g-${cat.id}" data-enter="gloss-add" autocomplete="off" aria-label="${tx("Новое значение, раздел")} ${esc(cat.label)}">
+      <button class="btn btn--primary" data-act="gloss-add">${tx("Добавить")}</button>
     </div>
-    ${items.length>=8?`<div class="filter"><input class="inp" id="gfilter" type="search" placeholder="Найти в разделе" value="${esc(S.gfilter)}" data-gfilter="1" autocomplete="off" aria-label="Поиск в разделе"></div>`:''}
-    ${shown.length?`<ul class="glist">${lis}</ul>`:`<div class="empty"><p>${items.length?'Ничего не найдено.':'В этом разделе пока пусто. Добавьте первое значение выше.'}</p></div>`}
-    ${miss.length?`<div class="hint"><span>В сменах есть значения, которых нет в справочнике: ${miss.length}.</span><button class="btn btn--sm" data-act="gloss-import">Добавить из смен</button></div>`:''}`;
+    ${items.length>=8?`<div class="filter"><input class="inp" id="gfilter" type="search" placeholder="${tx("Найти в разделе")}" value="${esc(S.gfilter)}" data-gfilter="1" autocomplete="off" aria-label="${tx("Поиск в разделе")}"></div>`:''}
+    ${shown.length?`<ul class="glist">${lis}</ul>`:`<div class="empty"><p>${items.length?tx("Ничего не найдено."):tx("В этом разделе пока пусто. Добавьте первое значение выше.")}</p></div>`}
+    ${miss.length?`<div class="hint"><span>${tx('В сменах есть значения, которых нет в справочнике: {k}.',{k:miss.length})}</span><button class="btn btn--sm" data-act="gloss-import">${tx("Добавить из смен")}</button></div>`:''}`;
 }
 
+function viewLang(){
+  return `<div class="langsel"><span class="tile logo-tile">${icon('scale')}</span><h1 class="logo">Tarazi</h1>
+    <p class="lead">Тілді таңдаңыз · Выберите язык</p>
+    <div class="langsel__btns"><button class="btn btn--primary btn--lg" data-act="setlang" data-lang="kk">Қазақша</button><button class="btn btn--primary btn--lg" data-act="setlang" data-lang="ru">Русский</button></div></div>`;
+}
+function viewSettings(){
+  const lg=(l,n)=>`<button class="pill${LANG===l?' is-on':''}" role="radio" aria-checked="${LANG===l}" data-act="setlang" data-lang="${l}">${n}</button>`;
+  const th=(v,ic,n)=>`<button class="pill${S.theme===v?' is-on':''}" role="radio" aria-checked="${S.theme===v}" data-act="settheme" data-theme="${v}">${icon(ic,'ic--sm')}${n}</button>`;
+  return appbar(sq('home','back',tx("Все смены"),'','sq--ghost'),'')
+    +`<h1>${tx("Настройки")}</h1>
+    <div class="sect"><h2>${tx("Язык")}</h2></div><div class="pills" role="radiogroup" aria-label="${tx("Язык")}">${lg('kk','Қазақша')}${lg('ru','Русский')}</div>
+    <div class="sect"><h2>${tx("Тема")}</h2></div><div class="pills" role="radiogroup" aria-label="${tx("Тема")}">${th('light','sun',tx("Светлая"))}${th('dark','moon',tx("Тёмная"))}${th('auto','contrast',tx("Как в системе"))}</div>
+    <p class="note" style="margin-top:28px">Tarazi · ${tx("Работает без интернета, данные хранятся на этом устройстве")}</p>`;
+}
+function setLang(l){
+  if(l!=='kk'&&l!=='ru')return;
+  LANG=l;try{localStorage.setItem(LKEY,l);}catch(_){}
+  try{document.documentElement.lang=l;}catch(_){}
+  render();window.scrollTo(0,0);
+}
 function render(){
   const ae=document.activeElement;let aid=null,sel=null;
   if(ae&&ae!==document.body&&$app.contains(ae)&&ae.id){aid=ae.id;try{if(ae.selectionStart!=null)sel=[ae.selectionStart,ae.selectionEnd];}catch(_){}}
+  if(!LANG){$app.innerHTML=viewLang();return;}
   let html;
-  if(!isReady()){html='<p class="lead" style="margin-top:24px">Загружаю данные…</p>';}
+  if(!isReady()){html=tx("<p class=\"lead\" style=\"margin-top:24px\">Загружаю данные…</p>");}
   else{
     const sh=S.shifts[S.shiftId];
     if(S.view==='car'&&sh&&sh.cars.some(c=>c.id===S.carId)){html=viewCar(sh,sh.cars.find(c=>c.id===S.carId));}
@@ -1026,15 +1094,23 @@ function render(){
     }
     else if(S.view==='glossary'){html=viewGlossary();}
     else if(S.view==='stats'){html=viewStats();}
+    else if(S.view==='settings'){html=viewSettings();}
     else{
       if(S.view!=='home'){S.view='home';S.shiftId=null;S.carId=null;try{location.hash='';}catch(_){}}
       html=viewHome();
     }
   }
   $app.innerHTML=html;
+  labelTables();
   if(S.focusId){const el=document.getElementById(S.focusId);if(el)el.focus();S.focusId=null;}
   else if(aid){const el=document.getElementById(aid);if(el){el.focus({preventScroll:true});if(sel){try{el.setSelectionRange(sel[0],sel[1]);}catch(_){}}}}
   if(S.scrollId){const el=document.getElementById(S.scrollId);if(el)el.scrollIntoView({block:'nearest'});S.scrollId=null;}
+}
+function labelTables(){
+  $app.querySelectorAll('table.tbl--stack').forEach(t=>{
+    const hs=[...t.querySelectorAll('thead th')].map(h=>h.textContent.trim());
+    t.querySelectorAll('tbody tr,tfoot tr').forEach(r=>{let c=0;[...r.children].forEach(td=>{const span=td.colSpan||1;td.setAttribute('data-l',span>1?'':(hs[c]||''));c+=span;});});
+  });
 }
 function updatePreview(){
   const car=currentCar(),el=document.getElementById('w-calc'),inp=document.getElementById('w-gross'),btn=document.getElementById('w-add');
@@ -1064,14 +1140,14 @@ function pickHtml(f){
   const items=S.glossary[f.pick].map(x=>x.name).sort((a,b)=>a.localeCompare(b,'ru'));
   const cur=f.value||'';
   const hasCur=cur&&items.some(n=>sameName(n,cur));
-  const opts=['<option value="">Выберите из списка…</option>']
+  const opts=[tx("<option value=\"\">Выберите из списка…</option>")]
     .concat(items.map(n=>`<option value="${esc(n)}"${sameName(n,cur)?' selected':''}>${esc(n)}</option>`));
-  if(cur&&!hasCur)opts.push(`<option value="${esc(cur)}" selected>${esc(cur)} (нет в справочнике)</option>`);
-  opts.push('<option value="__new__">+ Добавить новый…</option>');
-  return `<div class="field${f.half?' field--half':''}"><div class="field__lbl"><label for="f-${f.name}">${esc(f.label)}</label><button type="button" class="linkbtn" data-addnew="${f.name}">+ ${esc(f.addLabel||'Добавить')}</button></div>
+  if(cur&&!hasCur)opts.push(`<option value="${esc(cur)}" selected>${esc(cur)} ${tx("(нет в справочнике)")}</option>`);
+  opts.push(tx("<option value=\"__new__\">+ Добавить новый…</option>"));
+  return `<div class="field${f.half?' field--half':''}"><div class="field__lbl"><label for="f-${f.name}">${esc(f.label)}</label><button type="button" class="linkbtn" data-addnew="${f.name}">+ ${esc(f.addLabel||tx("Добавить"))}</button></div>
     <select class="inp" id="f-${f.name}" name="${f.name}" data-pick="${f.pick}">${opts.join('')}</select>
-    <input class="inp" id="f-${f.name}__new" name="${f.name}__new" placeholder="${esc(f.placeholder||'Новое значение')}" autocomplete="off" hidden>
-    ${items.length?'':'<p class="fhint">Справочник пока пуст. Нажмите «Добавить», и значение сохранится в справочнике.</p>'}
+    <input class="inp" id="f-${f.name}__new" name="${f.name}__new" placeholder="${esc(f.placeholder||tx("Новое значение"))}" autocomplete="off" hidden>
+    ${items.length?'':tx("<p class=\"fhint\">Справочник пока пуст. Нажмите «Добавить», и значение сохранится в справочнике.</p>")}
     <p class="err" data-err="${f.name}" hidden></p></div>`;
 }
 function fieldHtml(f){
@@ -1083,14 +1159,14 @@ function fieldHtml(f){
     <select class="inp" id="f-${f.name}" name="${f.name}">${f.options.map(o=>`<option value="${esc(o[0])}"${o[0]===f.value?' selected':''}>${esc(o[1])}</option>`).join('')}</select>
     <p class="err" data-err="${f.name}" hidden></p></div>`;
   return `<div class="field${f.half?' field--half':''}"><label for="f-${f.name}">${esc(f.label)}</label>
-    <input class="inp" id="f-${f.name}" name="${f.name}" type="${f.type==='time'?'text':(f.type||'text')}"${f.type==='time'?' inputmode="numeric" maxlength="5" placeholder="ЧЧ:ММ" data-time="1"':''}${f.inputmode?` inputmode="${f.inputmode}"`:''}${f.list?` list="${f.list}"`:''}${f.placeholder?` placeholder="${esc(f.placeholder)}"`:''} value="${esc(f.value)}" autocomplete="off">
+    <input class="inp" id="f-${f.name}" name="${f.name}" type="${f.type==='time'?'text':(f.type||'text')}"${f.type==='time'?tx(" inputmode=\"numeric\" maxlength=\"5\" placeholder=\"ЧЧ:ММ\" data-time=\"1\""):''}${f.inputmode?` inputmode="${f.inputmode}"`:''}${f.list?` list="${f.list}"`:''}${f.placeholder?` placeholder="${esc(f.placeholder)}"`:''} value="${esc(f.value)}" autocomplete="off">
     <p class="err" data-err="${f.name}" hidden></p></div>`;
 }
 function openForm(o){
   const html=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
     <h2 id="dlg-title" class="dlg-title">${esc(o.title)}</h2>
     <form id="dlg-form" novalidate autocomplete="off"><div class="fields">${o.fields.map(fieldHtml).join('')}</div>${o.extra||''}${o.extra2||''}
-    <div class="dlg-actions">${o.onDelete?'<button type="button" class="btn btn--ghost btn--danger dlg-del" data-act="modal-delete">Удалить</button>':''}<button type="button" class="btn" data-act="modal-close">Отмена</button><button type="submit" class="btn btn--primary">${esc(o.submitLabel||'Сохранить')}</button></div></form></div></div>`;
+    <div class="dlg-actions">${o.onDelete?tx("<button type=\"button\" class=\"btn btn--ghost btn--danger dlg-del\" data-act=\"modal-delete\">Удалить</button>"):''}<button type="button" class="btn" data-act="modal-close">${tx("Отмена")}</button><button type="submit" class="btn btn--primary">${esc(o.submitLabel||tx("Сохранить"))}</button></div></form></div></div>`;
   showModal(html,{onDelete:o.onDelete,autofill:o.autofill,submit(form){
     const v={},isNew={};
     o.fields.forEach(f=>{
@@ -1105,7 +1181,7 @@ function openForm(o){
       const er=form.querySelector('[data-err="'+f.name+'"]');
       const el=f.pick&&isNew[f.name]?form.elements[f.name+'__new']:form.elements[f.name];
       let msg='';
-      if(f.required&&!v[f.name])msg=f.pick?(isNew[f.name]?'Введите значение':'Выберите значение из списка'):'Заполните это поле';
+      if(f.required&&!v[f.name])msg=f.pick?(isNew[f.name]?tx("Введите значение"):tx("Выберите значение из списка")):tx("Заполните это поле");
       else if(f.check&&v[f.name])msg=f.check(v)||'';
       if(er){er.textContent=msg;er.hidden=!msg;}
       if(el&&el.setAttribute)el.setAttribute('aria-invalid',msg?'true':'false');
@@ -1119,15 +1195,15 @@ function openForm(o){
 function openConfirm(o){
   const html=`<div class="overlay"><div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlg-title" aria-describedby="dlg-text">
     <h2 id="dlg-title" class="dlg-title">${esc(o.title)}</h2><p id="dlg-text" class="dlg-text">${esc(o.text)}</p>
-    <div class="dlg-actions"><button type="button" class="btn" id="dlg-cancel" data-act="modal-close">Отмена</button><button type="button" class="btn ${o.safe?'btn--primary':'btn--solid-danger'}" data-act="modal-confirm">${esc(o.confirmLabel||'Удалить')}</button></div></div></div>`;
+    <div class="dlg-actions"><button type="button" class="btn" id="dlg-cancel" data-act="modal-close">${tx("Отмена")}</button><button type="button" class="btn ${o.safe?'btn--primary':'btn--solid-danger'}" data-act="modal-confirm">${esc(o.confirmLabel||tx("Удалить"))}</button></div></div></div>`;
   showModal(html,{onConfirm:o.onConfirm,focus:'#dlg-cancel'});
 }
 function openExportFallback(filename,text){
   const html=`<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
-    <h2 id="dlg-title" class="dlg-title">Файл готов</h2>
-    <p class="dlg-text">Автоматическое сохранение здесь недоступно. Скопируйте текст и вставьте в Excel или сохраните как файл «${esc(filename)}».</p>
+    <h2 id="dlg-title" class="dlg-title">${tx("Файл готов")}</h2>
+    <p class="dlg-text">${tx('Автоматическое сохранение здесь недоступно. Скопируйте текст и вставьте в Excel или сохраните как файл «{f}».',{f:esc(filename)})}</p>
     <textarea class="dlg-area" id="dlg-area" readonly>${esc(text)}</textarea>
-    <div class="dlg-actions"><button type="button" class="btn" data-act="modal-close">Закрыть</button><button type="button" class="btn btn--primary" data-act="copy-text">Скопировать</button></div></div></div>`;
+    <div class="dlg-actions"><button type="button" class="btn" data-act="modal-close">${tx("Закрыть")}</button><button type="button" class="btn btn--primary" data-act="copy-text">${tx("Скопировать")}</button></div></div></div>`;
   showModal(html,{focus:'#dlg-area'});
 }
 function showNewInput(name){
@@ -1143,7 +1219,7 @@ function autofillCar(form,car){
   });
   const r=[...form.querySelectorAll('input[name="color"]')].find(x=>x.value===car.color);if(r)r.checked=true;
   const nt=document.getElementById('af-note');
-  if(nt){nt.textContent='Данные подставлены из последней записи по этому номеру. Проверьте и измените при необходимости.';nt.hidden=false;}
+  if(nt){nt.textContent=tx("Данные подставлены из последней записи по этому номеру. Проверьте и измените при необходимости.");nt.hidden=false;}
 }
 
 /* ---------- forms ---------- */
@@ -1151,22 +1227,22 @@ function openShiftForm(id,fromId){
   const sh=id?S.shifts[id]:null;
   const src=fromId?S.shifts[fromId]:null;
   openForm({
-    title:sh?'Изменить смену':(src?'Копия смены':'Новая смена'),
-    submitLabel:sh?'Сохранить':(src?'Создать копию':'Создать смену'),
-    extra:src?'<p class="dlg-note">Машины скопируются без рейсов. Время прибытия, тару и водителей можно поправить в каждой машине.</p>':'',
+    title:sh?tx("Изменить смену"):(src?tx("Копия смены"):tx("Новая смена")),
+    submitLabel:sh?tx("Сохранить"):(src?tx("Создать копию"):tx("Создать смену")),
+    extra:src?tx("<p class=\"dlg-note\">Машины скопируются без рейсов. Время прибытия, тару и водителей можно поправить в каждой машине.</p>"):'',
     fields:[
-      {name:'date',label:'Дата',type:'date',required:true,value:sh?sh.date:todayISO(),half:true},
-      {name:'type',label:'Тип смены',options:[['day','Дневная'],['night','Ночная']],value:sh?sh.type:(src?src.type:S.homeType),half:true},
-      {name:'shift',label:'Название смены',list:'dl-shift',required:true,value:sh?sh.shift:(src?src.shift:'Первая смена (день)'),placeholder:'Вторая смена (день)'},
-      {name:'operator',label:'Оператор автовесов',pick:'operators',addLabel:'Новый оператор',required:true,value:sh?sh.operator:(src?src.operator:''),placeholder:'Фамилия Имя Отчество'},
-      {name:'status',label:'Статус',options:[['active','Активна'],['closed','Закрыта']],value:sh?sh.status:'active'}
+      {name:'date',label:tx("Дата"),type:'date',required:true,value:sh?sh.date:todayISO(),half:true},
+      {name:'type',label:tx("Тип смены"),options:[['day',tx("Дневная")],['night',tx("Ночная")]],value:sh?sh.type:(src?src.type:S.homeType),half:true},
+      {name:'shift',label:tx("Название смены"),list:'dl-shift',required:true,value:sh?sh.shift:(src?src.shift:tx("Первая смена (день)")),placeholder:tx("Вторая смена (день)")},
+      {name:'operator',label:tx("Оператор автовесов"),pick:'operators',addLabel:tx("Новый оператор"),required:true,value:sh?sh.operator:(src?src.operator:''),placeholder:tx("Фамилия Имя Отчество")},
+      {name:'status',label:tx("Статус"),options:[['active',tx("Активна")],['closed',tx("Закрыта")]],value:sh?sh.status:'active'}
     ],
-    extra2:'<datalist id="dl-shift"><option value="Первая смена (день)"><option value="Вторая смена (день)"><option value="Первая смена (ночь)"><option value="Вторая смена (ночь)"></datalist>',
+    extra2:tx("<datalist id=\"dl-shift\"><option value=\"Первая смена (день)\"><option value=\"Вторая смена (день)\"><option value=\"Первая смена (ночь)\"><option value=\"Вторая смена (ночь)\"></datalist>"),
     onDelete:sh?()=>handle('shift-delete',{dataset:{id:sh.id}}):null,
     onSave(v){
-      if(sh){mutateShift(id,s=>{s.date=v.date;s.type=v.type;s.shift=v.shift;s.operator=v.operator;s.status=v.status;});toast('Смена обновлена');}
+      if(sh){mutateShift(id,s=>{s.date=v.date;s.type=v.type;s.shift=v.shift;s.operator=v.operator;s.status=v.status;});toast(tx("Смена обновлена"));}
       else{const n={id:uid('s'),date:v.date,type:v.type,shift:v.shift,operator:v.operator,status:v.status,createdAt:Date.now(),
-        cars:src?src.cars.map(c=>({id:uid('c'),plate:c.plate,driver:c.driver,arrival:'',tare:c.tare,route:c.route,material:c.material,color:c.color,trips:[]})):[]};S.shifts[n.id]=n;persist(n.id);S.homeType=v.type;navigate('shift',n.id);toast('Смена создана');}
+        cars:src?src.cars.map(c=>({id:uid('c'),plate:c.plate,driver:c.driver,arrival:'',tare:c.tare,route:c.route,material:c.material,color:c.color,trips:[]})):[]};S.shifts[n.id]=n;persist(n.id);S.homeType=v.type;navigate('shift',n.id);toast(tx("Смена создана"));}
     }
   });
 }
@@ -1174,25 +1250,25 @@ function openCarForm(carId){
   const sh=S.shifts[S.shiftId];if(!sh)return;
   const car=carId?sh.cars.find(c=>c.id===carId):null;
   openForm({
-    title:car?'Изменить машину':'Новая машина',
-    submitLabel:car?'Сохранить':'Создать бланк',
+    title:car?tx("Изменить машину"):tx("Новая машина"),
+    submitLabel:car?tx("Сохранить"):tx("Создать бланк"),
     autofill:!car,
     fields:[
-      {name:'plate',label:'Номер машины',pick:'vehicles',addLabel:'Новая',required:true,value:car?car.plate:'',placeholder:'123ABC02',half:true},
-      {name:'arrival',label:'Время прибытия',type:'time',value:car?car.arrival:nowHM(),half:true,check:v=>normTime(v.arrival)?'':'Введите время, например 07:26'},
-      {name:'driver',label:'Водитель',pick:'drivers',addLabel:'Новый',required:true,value:car?car.driver:'',placeholder:'Фамилия Имя Отчество'},
-      {name:'tare',label:'Вес тары, кг',inputmode:'decimal',required:true,value:car?car.tare:'',placeholder:'например 14500',
-        check:v=>{const n=parseNum(v.tare);return isNaN(n)||n<=0?'Введите вес тары числом больше нуля':'';}},
-      {name:'route',label:'Маршрут',pick:'routes',addLabel:'Новый',required:true,value:car?car.route:'',placeholder:'Карьер → Завод'},
-      {name:'material',label:'Перевозимый материал',pick:'materials',addLabel:'Новый',required:true,value:car?car.material:'',placeholder:'Щебень 5–20'},
-      {name:'color',label:'Цвет карточки',colors:true,value:car?car.color:'orange'}
+      {name:'plate',label:tx("Номер машины"),pick:'vehicles',addLabel:tx("Новая"),required:true,value:car?car.plate:'',placeholder:'123ABC02',half:true},
+      {name:'arrival',label:tx("Время прибытия"),type:'time',value:car?car.arrival:nowHM(),half:true,check:v=>normTime(v.arrival)?'':tx("Введите время, например 07:26")},
+      {name:'driver',label:tx("Водитель"),pick:'drivers',addLabel:tx("Новый"),required:true,value:car?car.driver:'',placeholder:tx("Фамилия Имя Отчество")},
+      {name:'tare',label:tx("Вес тары, кг"),inputmode:'decimal',required:true,value:car?car.tare:'',placeholder:tx("например 14500"),
+        check:v=>{const n=parseNum(v.tare);return isNaN(n)||n<=0?tx("Введите вес тары числом больше нуля"):'';}},
+      {name:'route',label:tx("Маршрут"),pick:'routes',addLabel:tx("Новый"),required:true,value:car?car.route:'',placeholder:tx("Карьер → Завод")},
+      {name:'material',label:tx("Перевозимый материал"),pick:'materials',addLabel:tx("Новый"),required:true,value:car?car.material:'',placeholder:tx("Щебень 5–20")},
+      {name:'color',label:tx("Цвет карточки"),colors:true,value:car?car.color:'orange'}
     ],
     extra:car?'':'<p class="fhint" id="af-note" hidden></p>',
     onDelete:car?()=>handle('car-delete',{dataset:{car:carId}}):null,
     onSave(v){
       const props={plate:v.plate,driver:v.driver,arrival:normTime(v.arrival),tare:parseNum(v.tare),route:v.route,material:v.material,color:v.color||'orange'};
-      if(car){mutateShift(sh.id,s=>{Object.assign(s.cars.find(c=>c.id===carId),props);});toast('Данные машины обновлены');}
-      else{const nid=uid('c');S.scrollId='car-'+nid;mutateShift(sh.id,s=>{s.cars.push(Object.assign({id:nid,trips:[]},props));});toast('Бланк машины создан');}
+      if(car){mutateShift(sh.id,s=>{Object.assign(s.cars.find(c=>c.id===carId),props);});toast(tx("Данные машины обновлены"));}
+      else{const nid=uid('c');S.scrollId='car-'+nid;mutateShift(sh.id,s=>{s.cars.push(Object.assign({id:nid,trips:[]},props));});toast(tx("Бланк машины создан"));}
     }
   });
 }
@@ -1201,27 +1277,27 @@ function openTripForm(tripId){
   const trip=car.trips.find(t=>t.id===tripId);if(!trip)return;
   const carId=car.id;
   openForm({
-    title:'Рейс '+(car.trips.indexOf(trip)+1),
+    title:tx("Рейс ")+(car.trips.indexOf(trip)+1),
     fields:[
-      {name:'time',label:'Время',type:'time',required:true,value:trip.time,half:true,check:v=>normTime(v.time)?'':'Введите время, например 14:35'},
-      {name:'gross',label:'Брутто, кг',inputmode:'decimal',required:true,value:trip.gross,half:true,
-        check:v=>{const n=parseNum(v.gross);return isNaN(n)||n<=0?'Введите вес числом больше нуля':'';}}
+      {name:'time',label:tx("Время"),type:'time',required:true,value:trip.time,half:true,check:v=>normTime(v.time)?'':tx("Введите время, например 14:35")},
+      {name:'gross',label:tx("Брутто, кг"),inputmode:'decimal',required:true,value:trip.gross,half:true,
+        check:v=>{const n=parseNum(v.gross);return isNaN(n)||n<=0?tx("Введите вес числом больше нуля"):'';}}
     ],
-    extra:`<p class="dlg-note">Нетто = брутто − тара (${fmt(car.tare)} кг). Пересчитается автоматически.</p>`,
+    extra:`<p class="dlg-note">${tx('Нетто = брутто − тара ({t} кг). Пересчитается автоматически.',{t:fmt(car.tare)})}</p>`,
     onSave(v){
       mutateShift(sh.id,s=>{const t=s.cars.find(c=>c.id===carId).trips.find(x=>x.id===tripId);if(t){t.time=normTime(v.time);t.gross=parseNum(v.gross);}});
-      toast('Рейс обновлён');
+      toast(tx("Рейс обновлён"));
     }
   });
 }
 function openGlossEdit(cat,id){
   const it=S.glossary[cat].find(x=>x.id===id);if(!it)return;
   openForm({
-    title:'Изменить значение',
-    fields:[{name:'name',label:'Название',required:true,value:it.name,
-      check:v=>{const n=cleanName(cat,v.name);return S.glossary[cat].some(x=>x.id!==id&&sameName(x.name,n))?'Такое значение уже есть':'';}}],
-    extra:'<p class="dlg-note">В уже созданных сменах значение не изменится. Оно поменяется только в справочнике.</p>',
-    onSave(v){const t=S.glossary[cat].find(x=>x.id===id);if(!t)return;t.name=cleanName(cat,v.name);persistGlossary();render();toast('Сохранено');}
+    title:tx("Изменить значение"),
+    fields:[{name:'name',label:tx("Название"),required:true,value:it.name,
+      check:v=>{const n=cleanName(cat,v.name);return S.glossary[cat].some(x=>x.id!==id&&sameName(x.name,n))?tx("Такое значение уже есть"):'';}}],
+    extra:tx("<p class=\"dlg-note\">В уже созданных сменах значение не изменится. Оно поменяется только в справочнике.</p>"),
+    onSave(v){const t=S.glossary[cat].find(x=>x.id===id);if(!t)return;t.name=cleanName(cat,v.name);persistGlossary();render();toast(tx("Сохранено"));}
   });
 }
 
@@ -1231,6 +1307,7 @@ function parseHash(){
   if((m=/^#car-([a-z0-9]+)-([a-z0-9]+)$/.exec(h)))return{view:'car',shiftId:m[1],carId:m[2]};
   if((m=/^#shift-([a-z0-9]+)$/.exec(h)))return{view:'shift',shiftId:m[1]};
   if(h==='#stats')return{view:'stats'};
+  if(h==='#settings')return{view:'settings'};
   if((m=/^#glossary(?:-([a-z]+))?$/.exec(h)))return{view:'glossary',gcat:CATS.some(c=>c.id===m[1])?m[1]:null};
   return{view:'home'};
 }
@@ -1240,6 +1317,7 @@ function navigate(view,a,b){
   if(view==='shift'){if(S.shiftId!==a)S.carQuery='';S.view='shift';S.shiftId=a;S.carId=null;hash='shift-'+a;}
   else if(view==='car'){S.view='car';S.shiftId=a;S.carId=b;hash='car-'+a+'-'+b;}
   else if(view==='glossary'){S.view='glossary';S.shiftId=null;S.carId=null;if(a){S.gcat=a;S.gfilter='';}hash='glossary-'+S.gcat;}
+  else if(view==='settings'){S.view='settings';S.shiftId=null;S.carId=null;hash='settings';}
   else if(view==='stats'){S.view='stats';S.shiftId=null;S.carId=null;hash='stats';}
   else{S.view='home';S.shiftId=null;S.carId=null;}
   try{location.hash=hash;}catch(_){}
@@ -1251,14 +1329,14 @@ function addTrip(carId){
   const sh=S.shifts[S.shiftId];if(!sh)return;
   const car=sh.cars.find(c=>c.id===carId);if(!car)return;
   const g=parseNum(S.drafts[carId]);
-  if(isNaN(g)||g<=0){toast('Введите вес брутто числом, например 41250','err');const el=document.getElementById('w-gross');if(el)el.focus();return;}
+  if(isNaN(g)||g<=0){toast(tx("Введите вес брутто числом, например 41250"),'err');const el=document.getElementById('w-gross');if(el)el.focus();return;}
   const tv=S.drafts['t-'+carId];
   let time=nowHM();
-  if(tv){time=normTime(tv);if(!time){toast('Введите время цифрами, например 14:35','err');const el=document.getElementById('w-time');if(el)el.focus();return;}}
+  if(tv){time=normTime(tv);if(!time){toast(tx("Введите время цифрами, например 14:35"),'err');const el=document.getElementById('w-time');if(el)el.focus();return;}}
   S.drafts[carId]='';delete S.drafts['t-'+carId];S.focusId='w-gross';
   mutateShift(sh.id,s=>{s.cars.find(c=>c.id===carId).trips.push({id:uid('t'),time,gross:g});});
-  if(g<car.tare)toast('Брутто меньше тары. Проверьте вес.','err');
-  else toast('Рейс записан: нетто '+fmt(r2(g-car.tare))+' кг');
+  if(g<car.tare)toast(tx("Брутто меньше тары. Проверьте вес."),'err');
+  else toast(tx("Рейс записан: нетто ")+fmt(r2(g-car.tare))+tx(" кг"));
 }
 function setRange(kind){
   const d=new Date();
@@ -1275,15 +1353,18 @@ function handle(act,b){
     case 'theme':{
       S.theme=S.theme==='light'?'dark':S.theme==='dark'?'auto':'light';
       try{localStorage.setItem(TKEY,S.theme);}catch(_){}
-      applyTheme();render();toast('Тема: '+THEME_NAME[S.theme]);break;}
+      applyTheme();render();toast(tx("Тема: ")+THEME_NAME[S.theme]);break;}
     case 'shift-copy':if(sh)openShiftForm(null,sh.id);break;
     case 'glossary':navigate('glossary');break;
     case 'stats':navigate('stats');break;
+    case 'settings':navigate('settings');break;
+    case 'setlang':setLang(b.dataset.lang);break;
+    case 'settheme':{const v=b.dataset.theme;if(v==='light'||v==='dark'||v==='auto'){S.theme=v;try{localStorage.setItem(TKEY,v);}catch(_){}applyTheme();render();}break;}
     case 'range':setRange(b.dataset.range);break;
     case 'stats-report':{
       const list=periodShifts();
-      openExport({sub:'Сводка за период: '+(S.sFrom?dateRu(S.sFrom):'начало')+' — '+(S.sTo?dateRu(S.sTo):'сегодня'),
-        base:safeName('Сводка_'+(S.sFrom||'начало')+'_'+(S.sTo||todayISO())),doc:()=>periodDoc(list),csv:()=>periodCsv(list)});
+      openExport({sub:tx("Сводка за период: ")+(S.sFrom?dateRu(S.sFrom):tx("начало"))+' — '+(S.sTo?dateRu(S.sTo):tx("сегодня")),
+        base:safeName(tx("Сводка_")+(S.sFrom||tx("начало"))+'_'+(S.sTo||todayISO())),doc:()=>periodDoc(list),csv:()=>periodCsv(list)});
       break;}
     case 'backup':saveFile('avtovesy_backup_'+todayISO()+'.json',JSON.stringify({exportedAt:new Date().toISOString(),shifts:Object.values(S.shifts).sort(newestFirst),glossary:S.glossary},null,2),false);break;
     case 'gtab':navigate('glossary',b.dataset.cat);break;
@@ -1292,61 +1373,61 @@ function handle(act,b){
     case 'back-shift':if(sh)navigate('shift',sh.id);else navigate('home');break;
     case 'shift-new':openShiftForm(null);break;
     case 'shift-edit':if(sh)openShiftForm(sh.id);break;
-    case 'shift-toggle':if(sh){const open=sh.status==='active';mutateShift(sh.id,s=>{s.status=open?'closed':'active';});toast(open?'Смена закрыта':'Смена снова активна');}break;
+    case 'shift-toggle':if(sh){const open=sh.status==='active';mutateShift(sh.id,s=>{s.status=open?'closed':'active';});toast(open?tx("Смена закрыта"):tx("Смена снова активна"));}break;
     case 'shift-delete':{
       const s=S.shifts[b.dataset.id];if(!s)break;const t=shiftStats(s);
-      openConfirm({title:'Удалить смену?',confirmLabel:'Удалить смену',
-        text:`Смена «${s.shift}» за ${dateLong(s.date)} будет удалена вместе с машинами (${t.cars}) и рейсами (${t.trips}). Это действие нельзя отменить.`,
-        onConfirm(){delete S.shifts[s.id];persistDelete(s.id);if(S.shiftId===s.id)navigate('home');else render();toast('Смена удалена');}});
+      openConfirm({title:tx("Удалить смену?"),confirmLabel:tx("Удалить смену"),
+        text:tx('Смена «{n}» за {d} будет удалена вместе с машинами ({c}) и рейсами ({r}). Это действие нельзя отменить.',{n:s.shift,d:dateLong(s.date),c:t.cars,r:t.trips}),
+        onConfirm(){delete S.shifts[s.id];persistDelete(s.id);if(S.shiftId===s.id)navigate('home');else render();toast(tx("Смена удалена"));}});
       break;}
     case 'car-new':openCarForm(null);break;
     case 'car-edit':openCarForm(b.dataset.car);break;
     case 'cars-copy':{
       if(!sh)break;const prev=prevShift(sh);if(!prev)break;
       const fresh=prev.cars.filter(c=>!sh.cars.some(x=>sameName(x.plate,c.plate)));
-      if(!fresh.length){toast('Все машины из прошлой смены уже добавлены','err');break;}
-      openConfirm({title:'Копировать машины?',confirmLabel:'Копировать',safe:true,
-        text:`Из смены «${prev.shift}» за ${dateLong(prev.date)} будет добавлено машин: ${fresh.length}. Копируются номер, водитель, маршрут, материал, тара и цвет. Рейсы не копируются, время прибытия ставится текущее.`,
-        onConfirm(){const t=nowHM();mutateShift(sh.id,s=>{fresh.forEach(c=>s.cars.push({id:uid('c'),plate:c.plate,driver:c.driver,route:c.route,material:c.material,tare:c.tare,color:c.color,arrival:t,trips:[]}));});toast('Добавлено машин: '+fresh.length);}});
+      if(!fresh.length){toast(tx("Все машины из прошлой смены уже добавлены"),'err');break;}
+      openConfirm({title:tx("Копировать машины?"),confirmLabel:tx("Копировать"),safe:true,
+        text:tx('Из смены «{n}» за {d} будет добавлено машин: {k}. Копируются номер, водитель, маршрут, материал, тара и цвет. Рейсы не копируются, время прибытия ставится текущее.',{n:prev.shift,d:dateLong(prev.date),k:fresh.length}),
+        onConfirm(){const t=nowHM();mutateShift(sh.id,s=>{fresh.forEach(c=>s.cars.push({id:uid('c'),plate:c.plate,driver:c.driver,route:c.route,material:c.material,tare:c.tare,color:c.color,arrival:t,trips:[]}));});toast(tx("Добавлено машин: ")+fresh.length);}});
       break;}
     case 'car-delete':{
       if(!sh)break;const c=sh.cars.find(x=>x.id===b.dataset.car);if(!c)break;
-      openConfirm({title:'Удалить машину?',confirmLabel:'Удалить машину',
-        text:`Бланк ${c.plate} (${c.driver}) будет удалён вместе с рейсами: ${c.trips.length}. Это действие нельзя отменить.`,
-        onConfirm(){navigate('shift',sh.id);mutateShift(sh.id,s=>{s.cars=s.cars.filter(x=>x.id!==c.id);});toast('Машина удалена');}});
+      openConfirm({title:tx("Удалить машину?"),confirmLabel:tx("Удалить машину"),
+        text:tx('Бланк {p} ({d}) будет удалён вместе с рейсами: {k}. Это действие нельзя отменить.',{p:c.plate,d:c.driver,k:c.trips.length}),
+        onConfirm(){navigate('shift',sh.id);mutateShift(sh.id,s=>{s.cars=s.cars.filter(x=>x.id!==c.id);});toast(tx("Машина удалена"));}});
       break;}
     case 'trip-add':addTrip(b.dataset.car);break;
     case 'trip-edit':openTripForm(b.dataset.trip);break;
     case 'trip-delete':{
       const c=currentCar();if(!sh||!c)break;const idx=c.trips.findIndex(x=>x.id===b.dataset.trip);if(idx<0)break;
       const tid=b.dataset.trip;
-      openConfirm({title:'Удалить рейс?',confirmLabel:'Удалить рейс',
-        text:`Рейс ${idx+1} машины ${c.plate} (брутто ${fmt(c.trips[idx].gross)} кг) будет удалён.`,
-        onConfirm(){mutateShift(sh.id,s=>{const cc=s.cars.find(x=>x.id===c.id);cc.trips=cc.trips.filter(x=>x.id!==tid);});toast('Рейс удалён');}});
+      openConfirm({title:tx("Удалить рейс?"),confirmLabel:tx("Удалить рейс"),
+        text:tx('Рейс {i} машины {p} (брутто {g} кг) будет удалён.',{i:idx+1,p:c.plate,g:fmt(c.trips[idx].gross)}),
+        onConfirm(){mutateShift(sh.id,s=>{const cc=s.cars.find(x=>x.id===c.id);cc.trips=cc.trips.filter(x=>x.id!==tid);});toast(tx("Рейс удалён"));}});
       break;}
     case 'car-report':{
       if(!sh)break;const c=sh.cars.find(x=>x.id===b.dataset.car);if(!c)break;
-      openExport({sub:'Машина '+c.plate+' · '+dateRu(sh.date)+' · '+sh.shift,base:safeName('Отчёт_'+c.plate+'_'+sh.date+'_'+sh.shift),doc:()=>carDoc(sh,c),csv:()=>carReportCsv(sh,c)});break;}
+      openExport({sub:tx("Машина ")+c.plate+' · '+dateRu(sh.date)+' · '+sh.shift,base:safeName(tx("Отчёт_")+c.plate+'_'+sh.date+'_'+sh.shift),doc:()=>carDoc(sh,c),csv:()=>carReportCsv(sh,c)});break;}
     case 'shift-report':
-      if(sh)openExport({sub:'Общий расчёт за смену: '+dateRu(sh.date)+' · '+sh.shift,base:safeName('Общий-расчёт_'+sh.date+'_'+sh.shift),doc:()=>shiftDoc(sh),csv:()=>shiftReportCsv(sh)});break;
+      if(sh)openExport({sub:tx("Общий расчёт за смену: ")+dateRu(sh.date)+' · '+sh.shift,base:safeName(tx("Общий-расчёт_")+sh.date+'_'+sh.shift),doc:()=>shiftDoc(sh),csv:()=>shiftReportCsv(sh)});break;
     case 'gloss-add':{
       const key='g-'+S.gcat,name=cleanName(S.gcat,S.drafts[key]);
-      if(!name){toast('Введите значение','err');const el=document.getElementById('gnew');if(el)el.focus();break;}
-      if(glossFind(S.gcat,name)){toast('Такое значение уже есть','err');break;}
-      glossAdd(S.gcat,name);S.drafts[key]='';S.gfilter='';S.focusId='gnew';render();toast('Добавлено: '+name);
+      if(!name){toast(tx("Введите значение"),'err');const el=document.getElementById('gnew');if(el)el.focus();break;}
+      if(glossFind(S.gcat,name)){toast(tx("Такое значение уже есть"),'err');break;}
+      glossAdd(S.gcat,name);S.drafts[key]='';S.gfilter='';S.focusId='gnew';render();toast(tx("Добавлено: ")+name);
       break;}
     case 'gloss-edit':openGlossEdit(S.gcat,b.dataset.id);break;
     case 'gloss-delete':{
       const it=S.glossary[S.gcat].find(x=>x.id===b.dataset.id);if(!it)break;
       const cat=S.gcat,n=usageCount(cat,it.name);
-      openConfirm({title:'Удалить из справочника?',confirmLabel:'Удалить',
-        text:`«${it.name}» будет удалено из справочника.`+(n?` Значение используется в сменах (${n}), там оно останется без изменений.`:''),
-        onConfirm(){S.glossary[cat]=S.glossary[cat].filter(x=>x.id!==it.id);persistGlossary();render();toast('Удалено из справочника');}});
+      openConfirm({title:tx("Удалить из справочника?"),confirmLabel:tx("Удалить"),
+        text:tx('«{n}» будет удалено из справочника.',{n:it.name})+(n?' '+tx('Значение используется в сменах ({k}), там оно останется без изменений.',{k:n}):''),
+        onConfirm(){S.glossary[cat]=S.glossary[cat].filter(x=>x.id!==it.id);persistGlossary();render();toast(tx("Удалено из справочника"));}});
       break;}
     case 'gloss-import':{
       const miss=missingFromShifts();if(!miss.length)break;
       miss.forEach(m=>S.glossary[m.cat].push({id:uid('g'),name:m.name}));
-      persistGlossary();render();toast('Добавлено значений: '+miss.length);
+      persistGlossary();render();toast(tx("Добавлено значений: ")+miss.length);
       break;}
   }
 }
@@ -1382,8 +1463,8 @@ $modal.addEventListener('click',e=>{
   else if(a==='modal-confirm'){const fn=S.modal&&S.modal.onConfirm;closeModal();if(fn)fn();}
   else if(a==='copy-text'){
     const ta=document.getElementById('dlg-area');if(!ta)return;
-    const done=()=>toast('Скопировано');
-    const sel=()=>{ta.focus();ta.select();try{document.execCommand('copy')?done():toast('Выделите текст и скопируйте вручную','err');}catch(_){toast('Выделите текст и скопируйте вручную','err');}};
+    const done=()=>toast(tx("Скопировано"));
+    const sel=()=>{ta.focus();ta.select();try{document.execCommand('copy')?done():toast(tx("Выделите текст и скопируйте вручную"),'err');}catch(_){toast(tx("Выделите текст и скопируйте вручную"),'err');}};
     try{navigator.clipboard.writeText(ta.value).then(done,sel);}catch(_){sel();}
   }
 });
@@ -1427,7 +1508,6 @@ function fallbackLocal(){
   S.mode='local';S.db=null;S.shifts=loadLocal();S.glossary=loadGlossLocal();
   S.gotShifts=true;S.gotGloss=true;render();
 }
-
 /* ---------- Android (Capacitor): сохранение файлов через меню «Поделиться» ---------- */
 function nativeDownloads(){
   const C=window.Capacitor;
@@ -1465,7 +1545,7 @@ async function init(){
   S.downloads=dl||nativeDownloads();
   if(!db){fallbackLocal();return;}
   S.db=db;S.mode='db';
-  const fail=()=>{toast('Нет связи с хранилищем данных','err');S.gotShifts=true;S.gotGloss=true;render();};
+  const fail=()=>{toast(tx("Нет связи с хранилищем данных"),'err');S.gotShifts=true;S.gotGloss=true;render();};
   try{
     db.collection('shifts').onSnapshot(onSnap,fail);
     db.doc('glossary/main').onSnapshot(onGlossSnap,fail);
