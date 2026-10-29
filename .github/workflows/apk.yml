@@ -14,6 +14,10 @@ jobs:
         with: { distribution: temurin, java-version: 17 }
       - run: npm install
       - run: npx cap add android
+      - name: Tarazi icons and splash
+        run: |
+          cp -r resources/android/res/. android/app/src/main/res/
+          find android/app/src/main/res -name 'splash.png' -exec cp resources/splash.png {} \;
       - run: npx cap sync android
       - name: Build debug APK
         working-directory: android
