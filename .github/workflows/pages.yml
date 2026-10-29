@@ -18,6 +18,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Build web part
+        run: |
+          export BUILD_VERSION=1.${{ github.run_number }}
+          export BUILD_DATE=$(date -u +%F)
+          python3 build.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
