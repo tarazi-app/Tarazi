@@ -36,8 +36,8 @@ function viewHome(){
     +note()
     +(backupDue()?`<div class="hint"><span>${tx('Давно не было резервной копии. Сохраните её, чтобы не потерять данные.')}</span><button class="btn btn--sm" data-act="backup">${tx('Сохранить копию')}</button></div>`:'')
     +`<div class="pills" role="tablist" aria-label="${tx("Тип смены")}">
-      <button class="pill${S.homeType==='day'?' is-on':''}" role="tab" aria-selected="${S.homeType==='day'}" data-act="htype" data-type="day">${icon('sun','ic--sm')}${tx("1-дневная")}</button>
-      <button class="pill${S.homeType==='night'?' is-on':''}" role="tab" aria-selected="${S.homeType==='night'}" data-act="htype" data-type="night">${icon('moon','ic--sm')}${tx("2-ночная")}</button></div>
+      <button class="pill${S.homeType==='night'?' is-on':''}" role="tab" aria-selected="${S.homeType==='night'}" data-act="htype" data-type="night">${icon('moon','ic--sm')}${tx("1-ночная")}</button>
+      <button class="pill${S.homeType==='day'?' is-on':''}" role="tab" aria-selected="${S.homeType==='day'}" data-act="htype" data-type="day">${icon('sun','ic--sm')}${tx("2-дневная")}</button></div>
     <div class="search">${icon('search')}<input class="inp" id="hsearch" type="search" placeholder="${tx("Поиск по дате или оператору…")}" value="${esc(S.search)}" data-search="1" autocomplete="off" aria-label="${tx("Поиск по дате или оператору")}"></div>
     ${body}`;
 }

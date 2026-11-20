@@ -8,7 +8,7 @@ function openShiftForm(id,fromId){
     extra:src?tx("<p class=\"dlg-note\">Машины скопируются без рейсов. Время прибытия, тару и водителей можно поправить в каждой машине.</p>"):'',
     fields:[
       {name:'date',label:tx("Дата"),type:'date',required:true,value:sh?sh.date:todayISO(),half:true},
-      {name:'type',label:tx("Смена"),options:[['day',tx("1-дневная")],['night',tx("2-ночная")]],value:sh?sh.type:(src?src.type:autoType()),half:true},
+      {name:'type',label:tx("Смена"),options:[['night',tx("1-ночная")],['day',tx("2-дневная")]],value:sh?sh.type:(src?src.type:autoType()),half:true},
       {name:'operator',label:tx("Оператор автовесов"),pick:'operators',addLabel:tx("Новый оператор"),required:true,value:sh?sh.operator:(src?src.operator:lastOperator()),placeholder:tx("Фамилия Имя Отчество")},
       {name:'status',label:tx("Статус"),options:[['active',tx("Активна")],['closed',tx("Закрыта")]],value:sh?sh.status:'active'}
     ],

@@ -62,7 +62,7 @@ function stable(v){return JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array
 function safeName(s){return String(s).replace(/[\\\/:*?"<>|]+/g,'-').replace(/\s+/g,'_');}
 const newestFirst=(a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||0)-(a.createdAt||0);
 
-const shiftLabelRu=t=>t==='night'?'2-ночная':'1-дневная';
+const shiftLabelRu=t=>t==='night'?'1-ночная':'2-дневная';
 const shiftName=sh=>tx(shiftLabelRu(sh&&sh.type));
 function normalize(v,id){
   const sh=plain(v);
