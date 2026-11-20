@@ -48,6 +48,7 @@ function summaryHtml(sh){
   const rows=sh.cars.map((c,i)=>{const s=carStats(c);
     return `<tr><td>${i+1}</td><td class="mono"><span class="dot" style="background:${colorHex(c.color)}"></span>${esc(c.plate)}</td><td>${esc(c.driver)}</td><td>${esc(c.route)}</td><td>${esc(c.material)}</td><td class="r mono">${s.n}</td><td class="r mono net${s.net<0?' is-bad':''}">${fmt(s.net)}</td></tr>`;}).join('');
   const mats=materialStats(sh).map(m=>`<tr><td>${esc(m.name)}</td><td class="r mono">${m.cars}</td><td class="r mono">${m.trips}</td><td class="r mono net">${fmt(m.net)}</td></tr>`).join('');
+  const drs=driverRouteRows([sh],fmt).map(x=>`<tr><td>${esc(x[0])}</td><td>${x[1]===tx("Итого")?'<b>'+esc(x[1])+'</b>':routeHtml(x[1])}</td><td class="r mono">${x[2]}</td><td class="r mono">${x[3]}</td><td class="r mono net">${x[4]}</td></tr>`).join('');
   const rts=routeStats(sh).map(m=>`<tr><td>${routeHtml(m.name)}</td><td class="r mono">${m.cars}</td><td class="r mono">${m.trips}</td><td class="r mono net">${fmt(m.net)}</td></tr>`).join('');
   return `<div class="box scroll"><table class="tbl tbl--sum tbl--stack"><thead><tr><th>№</th><th>${tx("Машина")}</th><th>${tx("Водитель")}</th><th>${tx("Маршрут")}</th><th>${tx("Материал")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead>
     <tbody>${rows}</tbody>
@@ -55,7 +56,9 @@ function summaryHtml(sh){
     <h3>${tx("По материалам")}</h3>
     <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Материал")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${mats}</tbody></table></div>
     <h3>${tx("По маршрутам")}</h3>
-    <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Маршрут")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${rts}</tbody><tfoot><tr><td>${tx("Итого")}</td><td class="r mono">${tot.cars}</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>`;
+    <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Маршрут")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${rts}</tbody><tfoot><tr><td>${tx("Итого")}</td><td class="r mono">${tot.cars}</td><td class="r mono">${tot.trips}</td><td class="r mono net">${fmt(tot.net)}</td></tr></tfoot></table></div>
+    <h3>${tx("По водителям и маршрутам")}</h3>
+    <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Водитель")}</th><th>${tx("Маршрут")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${drs}</tbody></table></div>`;
 }
 const routeHtml=r=>esc(r).replace(/\d+/g,'<span class="rnum">$&</span>');
 function carCard(sh,c){

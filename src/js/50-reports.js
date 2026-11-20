@@ -46,6 +46,10 @@ function shiftReportCsv(sh){
   L.push(row(tx("Маршрут"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
   routeStats(sh).forEach(m=>L.push(row(m.name,m.cars,m.trips,m.net)));
   L.push(row(tx("ИТОГО"),tot.cars,tot.trips,tot.net));
+  L.push('');
+  L.push(row(tx("ПО ВОДИТЕЛЯМ И МАРШРУТАМ")));
+  L.push(row(...DR_HEAD()));
+  driverRouteRows([sh],n=>n).forEach(x=>L.push(row(...x)));
   return L.join('\r\n');
 }
 function periodCsv(list){
@@ -62,6 +66,8 @@ function periodCsv(list){
     L.push('');L.push(row(title));L.push(row(h,tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
     groupStats(list,pick).forEach(g=>L.push(row(g.name,g.cars,g.trips,g.net)));
   });
+  L.push('');L.push(row(tx("ПО ВОДИТЕЛЯМ И МАРШРУТАМ")));L.push(row(...DR_HEAD()));
+  driverRouteRows(list,n=>n).forEach(x=>L.push(row(...x)));
   return L.join('\r\n');
 }
 async function saveFile(filename,text,bom){

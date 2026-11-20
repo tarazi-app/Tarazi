@@ -20,7 +20,9 @@ function shiftDoc(sh){
         rows:materialStats(sh).map(m=>[m.name,m.cars,m.trips,fmt(m.net)])},
       {title:tx("По маршрутам"),head:[tx("Маршрут"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lrrr',boldLast:true,
         rows:routeStats(sh).map(m=>[m.name,m.cars,m.trips,fmt(m.net)]),
-        foot:[tx("Итого"),tot.cars,tot.trips,fmt(tot.net)]}
+        foot:[tx("Итого"),tot.cars,tot.trips,fmt(tot.net)]},
+      {title:tx("По водителям и маршрутам"),head:DR_HEAD(),align:'llrrr',boldLast:true,rows:driverRouteRows([sh],fmt),
+        foot:[tx("Итого"),'',tot.cars,tot.trips,fmt(tot.net)]}
     ]};
 }
 function periodDoc(list){
@@ -34,7 +36,9 @@ function periodDoc(list){
         foot:[tx("Итого"),'','',tot.cars,tot.trips,fmt(tot.net)]},
       grp(tx("По материалам"),tx("Материал"),c=>c.material),
       grp(tx("По маршрутам"),tx("Маршрут"),c=>c.route),
-      grp(tx("По водителям"),tx("Водитель"),c=>c.driver)
+      grp(tx("По водителям"),tx("Водитель"),c=>c.driver),
+      {title:tx("По водителям и маршрутам"),head:DR_HEAD(),align:'llrrr',boldLast:true,rows:driverRouteRows(list,fmt),
+        foot:[tx("Итого"),'',tot.cars,tot.trips,fmt(tot.net)]}
     ]};
 }
 function docToTxt(doc){

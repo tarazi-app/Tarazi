@@ -10,6 +10,27 @@ function groupStats(list,pick){
   }));
   return Object.values(m).sort((a,b)=>b.net-a.net);
 }
+function driverRoutes(list){
+  const d={};
+  list.forEach(sh=>sh.cars.forEach(c=>{
+    const dn=c.driver||tx("Не указан"),rn=c.route||tx("Без маршрута"),s=carStats(c);
+    const dk=dn.trim().toLowerCase(),rk=rn.trim().toLowerCase();
+    const D=d[dk]||(d[dk]={name:dn,cars:0,trips:0,net:0,r:{}});
+    const R=D.r[rk]||(D.r[rk]={name:rn,cars:0,trips:0,net:0});
+    [D,R].forEach(x=>{x.cars++;x.trips+=s.n;x.net=r2(x.net+s.net);});
+  }));
+  return Object.values(d).map(D=>({name:D.name,cars:D.cars,trips:D.trips,net:D.net,routes:Object.values(D.r).sort((a,b)=>b.net-a.net)})).sort((a,b)=>b.net-a.net);
+}
+// Строки для таблицы «Водитель → маршруты» с итогом по каждому водителю.
+function driverRouteRows(list,f){
+  const out=[];
+  driverRoutes(list).forEach(D=>{
+    D.routes.forEach(R=>out.push([D.name,R.name,R.cars,R.trips,f(R.net)]));
+    if(D.routes.length>1)out.push([D.name,tx("Итого"),D.cars,D.trips,f(D.net)]);
+  });
+  return out;
+}
+const DR_HEAD=()=>[tx("Водитель"),tx("Маршрут"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")];
 const materialStats=sh=>groupStats([sh],c=>c.material);
 const routeStats=sh=>groupStats([sh],c=>c.route||tx("Без маршрута"));
 function currentCar(){const sh=S.shifts[S.shiftId];return sh?sh.cars.find(c=>c.id===S.carId):null;}

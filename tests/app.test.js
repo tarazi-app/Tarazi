@@ -247,3 +247,20 @@ test('отчёт по смене: итоги по маршрутам и без �
   assert.equal(String(rt.rows[0][3]).replace(/\s/g, ''), '95460');
   await ctx.close();
 });
+
+test('отчёт: водители и их маршруты', async () => {
+  const sh = shift({ cars: [car(1, { route: 'A1' }), car(2, { route: 'B2' }), car(3, { driver: 'Әлиев Д.', route: 'A1' })] });
+  const { ctx, page } = await open(browser, url, { shifts: { s1: sh }, hash: '#shift-s1' });
+  await page.waitForSelector('.appbar');
+  const d = await T(page, () => { const t = window.__t; return [t.shiftDoc(t.S.shifts.s1), t.periodDoc(Object.values(t.S.shifts))]; });
+  for (const doc of d) {
+    const tb = doc.tables.find(x => /водител.*маршрут|жүргізуші.*бағыт/i.test(x.title));
+    assert.ok(tb, 'нет таблицы водитель→маршруты');
+    const n = s => Number(String(s).replace(/\s/g, ''));
+    assert.deepEqual(tb.rows.map(r => [r[0], r[1]]), [['Нұрмағамбетов Б.', 'A1'], ['Нұрмағамбетов Б.', 'B2'], ['Нұрмағамбетов Б.', 'Итого'], ['Әлиев Д.', 'A1']].map(x => [x[0], x[1] === 'Итого' ? tb.rows[2][1] : x[1]]));
+    assert.equal(n(tb.rows[2][4]), 95460);
+    assert.equal(n(tb.foot[4]), 143190);
+  }
+  assert.ok(await page.$$eval('h3', e => e.some(x => /водител|жүргізуші/i.test(x.textContent))));
+  await ctx.close();
+});
