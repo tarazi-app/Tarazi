@@ -41,6 +41,15 @@ function handle(act,b){
       try{localStorage.setItem(TKEY,S.theme);}catch(_){}
       applyTheme();render();toast(tx("Тема: ")+THEME_NAME[S.theme]);break;}
     case 'shift-copy':if(sh)openShiftForm(null,sh.id);break;
+    case 'route-move':{
+      if(!sh)break;
+      const order=[];sh.cars.forEach(c=>{const k=c.route||tx("Без маршрута");if(!order.includes(k))order.push(k);});
+      const i=order.indexOf(b.dataset.route),j=i+(b.dataset.dir==='up'?-1:1);
+      if(i<0||j<0||j>=order.length)break;
+      [order[i],order[j]]=[order[j],order[i]];
+      S.scrollId=null;
+      mutateShift(sh.id,s=>{s.cars=order.flatMap(k=>s.cars.filter(c=>(c.route||tx("Без маршрута"))===k));});
+      break;}
     case 'carview':S.carView=b.dataset.view==='grid'?'grid':'list';try{localStorage.setItem('tarazi.carView',S.carView);}catch(_){}render();break;
     case 'glossary':navigate('glossary');break;
     case 'stats':navigate('stats');break;

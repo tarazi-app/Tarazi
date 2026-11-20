@@ -54,11 +54,12 @@ function summaryHtml(sh){
     <h3>${tx("По материалам")}</h3>
     <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Материал")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${mats}</tbody></table></div>`;
 }
+const routeHtml=r=>esc(r).replace(/\d+/g,'<span class="rnum">$&</span>');
 function carCard(sh,c){
   const s=carStats(c),hex=colorHex(c.color);
   return `<a class="ccard" id="car-${esc(c.id)}" style="border-left-color:${hex}" href="#car-${esc(sh.id)}-${esc(c.id)}" data-act="open-car" data-car="${esc(c.id)}">
     <div class="ccard__top"><span class="tile tile--car" style="background:${hex}">${icon('truck')}</span>
-      <div class="ccard__id"><div class="ccard__line"><span class="ccard__name">${esc(plateLabel(c.plate))}</span><span class="ccard__route">${esc(c.route)}</span></div>
+      <div class="ccard__id"><div class="ccard__line"><span class="ccard__name">${esc(plateLabel(c.plate))}</span><span class="ccard__route">${routeHtml(c.route)}</span></div>
         <div class="ccard__driver">${esc(c.driver)}</div></div></div>
     <div class="ccard__net"><span class="muted">${tx("Итого НЕТТО")}</span><b class="mono${s.net<0?' is-bad':''}">${fmt(s.net)} ${tx("кг")}</b></div>
     <div class="ccard__foot"><span class="chip">${s.n} ${plural(s.n,[tx("рейс"),tx("рейса"),tx("рейсов")])}</span></div>
@@ -70,7 +71,9 @@ function viewShift(sh){
   const vis=cq?sh.cars.filter(c=>[c.driver,c.plate,c.route,c.material].join(' ').toLowerCase().includes(cq)):sh.cars;
   const groups=new Map();
   vis.forEach(c=>{const k=c.route||tx("Без маршрута");if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);});
-  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span>${esc(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span></div>${S.carView==='grid'?`<div class="cgrid">${cars.map(c=>carCard(sh,c)).join('')}</div>`:cars.map(c=>carCard(sh,c)).join('')}`).join('');
+  const gkeys=[...groups.keys()],canMove=!cq&&gkeys.length>1;
+  const mv=(k,dir,ic,lbl,off)=>`<button class="ibtn" data-act="route-move" data-dir="${dir}" data-route="${esc(k)}" aria-label="${esc(lbl)}"${off?' disabled':''}>${icon(ic,'ic--sm')}</button>`;
+  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span class="rgroup__name">${routeHtml(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span>${canMove?`<span class="rgroup__mv">${mv(route,'up','arup',tx('Маршрут выше'),route===gkeys[0])}${mv(route,'down','ardn',tx('Маршрут ниже'),route===gkeys[gkeys.length-1])}</span>`:''}</div>${S.carView==='grid'?`<div class="cgrid">${cars.map(c=>carCard(sh,c)).join('')}</div>`:cars.map(c=>carCard(sh,c)).join('')}`).join('');
   const copyBtn=prev?`<button class="btn btn--ghost btn--sm" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:'';
   let list;
   if(!sh.cars.length)list=`<div class="empty"><p>${tx("В этой смене пока нет машин. Для каждой машины создаётся свой бланк.")}</p><div class="row-btns"><button class="btn btn--primary" data-act="car-new">${icon('plus','ic--sm')}${tx("Добавить машину")}</button>${prev?`<button class="btn" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:''}</div></div>`;
@@ -132,7 +135,7 @@ function viewCar(sh,c){
         <div class="carcard__id"><div class="carcard__name">${esc(c.driver)}</div><div class="muted">${esc(plateLabel(c.plate))} ${tx("· Прибытие:")} ${esc(c.arrival||'—')}</div></div>
         <button class="ibtn" data-act="car-edit" data-car="${esc(c.id)}" aria-label="${tx("Изменить машину")}">${icon('edit')}</button></div>
       <ul class="facts">
-        <li>${icon('pin','ic--sm')}<span>${esc(c.route)}</span></li>
+        <li>${icon('pin','ic--sm')}<span class="routeline">${routeHtml(c.route)}</span></li>
         <li>${icon('box','ic--sm')}<span>${esc(c.material)}</span></li>
         <li>${icon('scale','ic--sm')}<span>${tx("Тара:")} ${fmt(c.tare)} ${tx("кг")}</span></li>
         <li>${icon('truck','ic--sm')}<span>${s.n} ${plural(s.n,[tx("рейс"),tx("рейса"),tx("рейсов")])}</span></li>

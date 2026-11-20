@@ -1,5 +1,7 @@
 /* ---------- helpers ---------- */
 const IC={
+  arup:'<path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>',
+  ardn:'<path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/>',
   back:'<path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>',
   edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/>',
   trash:'<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/>',

@@ -213,3 +213,23 @@ test('гид при перезапуске не трогает настоящи�
   assert.deepEqual(errors, []);
   await ctx.close();
 });
+
+test('маршруты: стрелки меняют блоки местами, цифры выделены', async () => {
+  const mk = (id, route) => car(id, { route, id: 'c' + id });
+  const sh = shift({ cars: [mk(1, 'ДСК3-К8'), mk(2, 'РС3-ДСК2'), mk(3, 'РС2-ДСК1'), mk(4, 'РС3-ДСК2')] });
+  const { ctx, page, errors } = await open(browser, url, { shifts: { s1: sh }, hash: '#shift-s1' });
+  await page.waitForSelector('.rgroup');
+  const names = () => page.$$eval('.rgroup__name', e => e.map(x => x.textContent));
+  assert.deepEqual(await names(), ['ДСК3-К8', 'РС3-ДСК2', 'РС2-ДСК1']);
+  assert.ok(await page.$('.rgroup .rnum'));
+  assert.equal(await page.$$eval('.rgroup__mv .ibtn:disabled', e => e.length), 2);
+  await page.click('.rgroup__mv [data-dir=down] >> nth=1');
+  assert.deepEqual(await names(), ['ДСК3-К8', 'РС2-ДСК1', 'РС3-ДСК2']);
+  await page.click('.rgroup__mv [data-dir=up] >> nth=2');
+  assert.deepEqual(await names(), ['ДСК3-К8', 'РС3-ДСК2', 'РС2-ДСК1']);
+  await page.reload(); await page.waitForSelector('.rgroup');
+  assert.deepEqual(await names(), ['ДСК3-К8', 'РС3-ДСК2', 'РС2-ДСК1']);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 390);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
