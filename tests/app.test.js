@@ -276,3 +276,20 @@ test('внутри блока маршрута машины по номеру, �
   assert.deepEqual(await ids(), ['car-c4', 'car-c2', 'car-c1', 'car-c3']);
   await ctx.close();
 });
+
+test('переименование в справочнике меняет и существующие записи', async () => {
+  const sh = shift({ cars: [car(1, { driver: 'Иванов И.' }), car(2, { driver: ' иванов и. ' }), car(3, { driver: 'Әлиев Д.' })] });
+  const { ctx, page, errors } = await open(browser, url, { shifts: { s1: sh }, hash: '#glossary' });
+  await page.waitForSelector('.appbar');
+  await page.evaluate(() => { window.__t.S.glossary.drivers.push({ id: 'g1', name: 'Иванов И.' }); });
+  await page.click('[data-act=gtab][data-cat=drivers]');
+  await page.click('[data-act=gloss-edit] >> nth=0');
+  const cur = await page.inputValue('.dialog input');
+  assert.ok(cur);
+  await page.fill('.dialog input', 'Петров П.');
+  await page.click('.dlg-actions .btn--primary');
+  const drivers = await page.evaluate(() => window.__t.S.shifts.s1.cars.map(c => c.driver));
+  assert.ok(drivers.filter(x => x === 'Петров П.').length >= 1 && !drivers.includes(cur), JSON.stringify(drivers) + ' ' + cur);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});

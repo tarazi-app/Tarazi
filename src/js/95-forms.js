@@ -70,8 +70,27 @@ function openGlossEdit(cat,id){
     title:tx("Изменить значение"),
     fields:[{name:'name',label:tx("Название"),required:true,value:it.name,
       check:v=>{const n=cleanName(cat,v.name);return S.glossary[cat].some(x=>x.id!==id&&sameName(x.name,n))?tx("Такое значение уже есть"):'';}}],
-    extra:tx("<p class=\"dlg-note\">В уже созданных сменах значение не изменится. Оно поменяется только в справочнике.</p>"),
-    onSave(v){const t=S.glossary[cat].find(x=>x.id===id);if(!t)return;t.name=cleanName(cat,v.name);persistGlossary();render();toast(tx("Сохранено"));}
+    extra:tx("<p class=\"dlg-note\">Значение изменится и в справочнике, и во всех уже созданных сменах.</p>"),
+    onSave(v){
+      const t=S.glossary[cat].find(x=>x.id===id);if(!t)return;
+      const old=t.name,nn=cleanName(cat,v.name);
+      t.name=nn;persistGlossary();
+      if(old!==nn)renameInShifts(cat,old,nn);
+      render();toast(tx("Сохранено"));
+    }
   });
 }
 
+
+// Переименование в справочнике: то же имя меняется во всех существующих сменах.
+function renameInShifts(cat,old,nn){
+  const field={routes:'route',vehicles:'plate',drivers:'driver',materials:'material'}[cat];
+  Object.values(S.shifts).forEach(sh=>{
+    const hit=cat==='operators'?sameName(sh.operator,old):sh.cars.some(c=>sameName(c[field],old));
+    if(!hit)return;
+    mutateShift(sh.id,x=>{
+      if(cat==='operators')x.operator=nn;
+      else x.cars.forEach(c=>{if(sameName(c[field],old))c[field]=nn;});
+    });
+  });
+}
