@@ -77,6 +77,7 @@ function viewShift(sh){
   const vis=cq?sh.cars.filter(c=>[c.driver,c.plate,c.route,c.material].join(' ').toLowerCase().includes(cq)):sh.cars;
   const groups=new Map();
   vis.forEach(c=>{const k=c.route||tx("Без маршрута");if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);});
+  groups.forEach(l=>l.sort((x,y)=>String(x.plate||'').localeCompare(String(y.plate||''),'ru',{numeric:true,sensitivity:'base'})));
   const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span class="rgroup__name">${routeHtml(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span></div>${S.carView==='grid'?`<div class="cgrid">${cars.map(c=>carCard(sh,c)).join('')}</div>`:cars.map(c=>carCard(sh,c)).join('')}`).join('');
   const copyBtn=prev?`<button class="btn btn--ghost btn--sm" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:'';
   let list;

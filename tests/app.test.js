@@ -227,7 +227,6 @@ test('маршруты: блок с новым рейсом уходит на п
   await page.fill('#w-gross', '41000'); await page.click('#w-add');
   await page.click('[data-act=back-shift]'); await page.waitForSelector('.rgroup');
   assert.deepEqual(await names(), ['РС3-ДСК2', 'ДСК3-К8', 'РС2-ДСК1']);
-  assert.equal(await page.$eval('.rgroup + .ccard, .rgroup + .cgrid .ccard', e => e.id), 'car-c4');
   await page.waitForTimeout(500);
   await page.reload(); await page.waitForSelector('.rgroup');
   assert.deepEqual(await names(), ['РС3-ДСК2', 'ДСК3-К8', 'РС2-ДСК1']);
@@ -262,5 +261,18 @@ test('отчёт: водители и их маршруты', async () => {
     assert.equal(n(tb.foot[4]), 143190);
   }
   assert.ok(await page.$$eval('h3', e => e.some(x => /водител|жүргізуші/i.test(x.textContent))));
+  await ctx.close();
+});
+
+test('внутри блока маршрута машины по номеру, блоки по обновлению', async () => {
+  const mk = (id, plate, route) => car(id, { plate, route, id: 'c' + id, trips: [] });
+  const sh = shift({ cars: [mk(1, '670', 'A1'), mk(2, '191', 'A1'), mk(3, '1000', 'A1'), mk(4, '5', 'B2')] });
+  const { ctx, page } = await open(browser, url, { shifts: { s1: sh }, hash: '#shift-s1' });
+  await page.waitForSelector('.rgroup');
+  const ids = () => page.$$eval('.ccard', e => e.map(x => x.id));
+  assert.deepEqual(await ids(), ['car-c2', 'car-c1', 'car-c3', 'car-c4']);
+  await page.click('#car-c4'); await page.fill('#w-gross', '41000'); await page.click('#w-add');
+  await page.click('[data-act=back-shift]'); await page.waitForSelector('.rgroup');
+  assert.deepEqual(await ids(), ['car-c4', 'car-c2', 'car-c1', 'car-c3']);
   await ctx.close();
 });
