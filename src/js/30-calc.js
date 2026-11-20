@@ -11,6 +11,7 @@ function groupStats(list,pick){
   return Object.values(m).sort((a,b)=>b.net-a.net);
 }
 const materialStats=sh=>groupStats([sh],c=>c.material);
+const routeStats=sh=>groupStats([sh],c=>c.route||tx("Без маршрута"));
 function currentCar(){const sh=S.shifts[S.shiftId];return sh?sh.cars.find(c=>c.id===S.carId):null;}
 function periodShifts(){return Object.values(S.shifts).filter(sh=>(!S.sFrom||sh.date>=S.sFrom)&&(!S.sTo||sh.date<=S.sTo)).sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.createdAt||0)-(b.createdAt||0));}
 

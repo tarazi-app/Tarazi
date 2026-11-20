@@ -42,10 +42,10 @@ function shiftReportCsv(sh){
   L.push(row(tx("Материал"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
   materialStats(sh).forEach(m=>L.push(row(m.name,m.cars,m.trips,m.net)));
   L.push('');
-  L.push(row(tx("ВСЕ РЕЙСЫ")));
-  L.push(row('№',tx("Номер машины"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Время взвешивания"),tx("Тара, кг"),tx("Брутто, кг"),tx("Нетто, кг")));
-  let n=0;
-  sh.cars.forEach(c=>c.trips.forEach(t=>{n++;L.push(row(n,c.plate,c.driver,c.route,c.material,t.time,c.tare,t.gross,r2(t.gross-c.tare)));}));
+  L.push(row(tx("ИТОГО ПО МАРШРУТАМ")));
+  L.push(row(tx("Маршрут"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")));
+  routeStats(sh).forEach(m=>L.push(row(m.name,m.cars,m.trips,m.net)));
+  L.push(row(tx("ИТОГО"),tot.cars,tot.trips,tot.net));
   return L.join('\r\n');
 }
 function periodCsv(list){

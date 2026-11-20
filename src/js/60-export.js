@@ -10,8 +10,6 @@ function carDoc(sh,car){
 }
 function shiftDoc(sh){
   const tot=shiftStats(sh);
-  const trips=[];let n=0;
-  sh.cars.forEach(c=>c.trips.forEach(t=>{n++;trips.push([n,c.plate,c.driver,c.route,c.material,t.time,fmt(c.tare),fmt(t.gross),fmt(r2(t.gross-c.tare))]);}));
   return {title:tx("Общий расчёт за смену"),orient:'l',
     meta:[[tx("Дата"),dateRu(sh.date)],[tx("Смена"),shiftName(sh)],[tx("Оператор автовесов"),sh.operator],[tx("Машин"),tot.cars],[tx("Рейсов"),tot.trips],[tx("Нетто всего, кг"),fmt(tot.net)]],
     tables:[
@@ -20,7 +18,9 @@ function shiftDoc(sh){
         foot:[tx("Итого"),'','','','','','',tot.trips,fmt(tot.gross),fmt(tot.net)]},
       {title:tx("По материалам"),head:[tx("Материал"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lrrr',boldLast:true,
         rows:materialStats(sh).map(m=>[m.name,m.cars,m.trips,fmt(m.net)])},
-      {title:tx("Все рейсы"),head:['№',tx("Машина"),tx("Водитель"),tx("Маршрут"),tx("Материал"),tx("Время"),tx("Тара, кг"),tx("Брутто, кг"),tx("Нетто, кг")],align:'lllllrrrr',boldLast:true,rows:trips}
+      {title:tx("По маршрутам"),head:[tx("Маршрут"),tx("Машин"),tx("Рейсов"),tx("Нетто, кг")],align:'lrrr',boldLast:true,
+        rows:routeStats(sh).map(m=>[m.name,m.cars,m.trips,fmt(m.net)]),
+        foot:[tx("Итого"),tot.cars,tot.trips,fmt(tot.net)]}
     ]};
 }
 function periodDoc(list){

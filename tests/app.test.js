@@ -234,3 +234,16 @@ test('маршруты: блок с новым рейсом уходит на п
   assert.deepEqual(errors, []);
   await ctx.close();
 });
+
+test('отчёт по смене: итоги по маршрутам и без списка взвешиваний', async () => {
+  const { ctx, page } = await open(browser, url);
+  await page.waitForSelector('.appbar');
+  const d = await T(page, () => { const t = window.__t; return t.shiftDoc(t.S.shifts.s1); });
+  const titles = d.tables.map(x => x.title);
+  assert.ok(titles.some(x => /маршрут|Бағыт|бағыт/i.test(x)), 'нет таблицы маршрутов: ' + titles);
+  assert.ok(!titles.some(x => /Все рейсы|Барлық рейс/i.test(x)), 'остался список рейсов');
+  const rt = d.tables.find(x => /маршрут|бағыт/i.test(x.title));
+  assert.equal(rt.rows.length, 1);
+  assert.equal(String(rt.rows[0][3]).replace(/\s/g, ''), '95460');
+  await ctx.close();
+});
