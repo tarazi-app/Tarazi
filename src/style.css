@@ -129,8 +129,6 @@ button{font-family:inherit}
 .sect{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:28px 0 12px}
 .rgroup{display:flex;align-items:center;gap:10px;margin:18px 0 10px;font-weight:600;font-size:19px;line-height:1.25}
 .rgroup__name{min-width:0;overflow-wrap:anywhere}
-.rgroup__mv{margin-left:auto;display:flex;gap:4px;flex:none}
-.rgroup__mv .ibtn:disabled{opacity:.3}
 .rgroup .chip{font-size:13px;font-weight:500;flex:none}
 .rnum{font-size:1.18em;font-weight:800;letter-spacing:.01em}
 .routeline .rnum{font-size:1.1em}

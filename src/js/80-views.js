@@ -71,9 +71,7 @@ function viewShift(sh){
   const vis=cq?sh.cars.filter(c=>[c.driver,c.plate,c.route,c.material].join(' ').toLowerCase().includes(cq)):sh.cars;
   const groups=new Map();
   vis.forEach(c=>{const k=c.route||tx("Без маршрута");if(!groups.has(k))groups.set(k,[]);groups.get(k).push(c);});
-  const gkeys=[...groups.keys()],canMove=!cq&&gkeys.length>1;
-  const mv=(k,dir,ic,lbl,off)=>`<button class="ibtn" data-act="route-move" data-dir="${dir}" data-route="${esc(k)}" aria-label="${esc(lbl)}"${off?' disabled':''}>${icon(ic,'ic--sm')}</button>`;
-  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span class="rgroup__name">${routeHtml(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span>${canMove?`<span class="rgroup__mv">${mv(route,'up','arup',tx('Маршрут выше'),route===gkeys[0])}${mv(route,'down','ardn',tx('Маршрут ниже'),route===gkeys[gkeys.length-1])}</span>`:''}</div>${S.carView==='grid'?`<div class="cgrid">${cars.map(c=>carCard(sh,c)).join('')}</div>`:cars.map(c=>carCard(sh,c)).join('')}`).join('');
+  const carsHtml=[...groups].map(([route,cars])=>`<div class="rgroup">${icon('pin')}<span class="rgroup__name">${routeHtml(route)}</span><span class="chip">${cars.length} ${tx("маш.")}</span></div>${S.carView==='grid'?`<div class="cgrid">${cars.map(c=>carCard(sh,c)).join('')}</div>`:cars.map(c=>carCard(sh,c)).join('')}`).join('');
   const copyBtn=prev?`<button class="btn btn--ghost btn--sm" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:'';
   let list;
   if(!sh.cars.length)list=`<div class="empty"><p>${tx("В этой смене пока нет машин. Для каждой машины создаётся свой бланк.")}</p><div class="row-btns"><button class="btn btn--primary" data-act="car-new">${icon('plus','ic--sm')}${tx("Добавить машину")}</button>${prev?`<button class="btn" data-act="cars-copy">${icon('copy','ic--sm')}${tx("Копировать из прошлой смены")}</button>`:''}</div></div>`;

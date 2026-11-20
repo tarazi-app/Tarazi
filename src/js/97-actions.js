@@ -20,7 +20,7 @@ function commitTrip(carId,g,time){
   const sh=S.shifts[S.shiftId];if(!sh)return;
   const car=sh.cars.find(c=>c.id===carId);if(!car)return;
   S.drafts[carId]='';delete S.drafts['t-'+carId];S.focusId='w-gross';
-  mutateShift(sh.id,s=>{s.cars.find(c=>c.id===carId).trips.push({id:uid('t'),time,gross:g});});
+  mutateShift(sh.id,s=>{const i=s.cars.findIndex(c=>c.id===carId),c=s.cars[i];c.trips.push({id:uid('t'),time,gross:g});if(i>0){s.cars.splice(i,1);s.cars.unshift(c);}});
   if(g<car.tare)toast(tx("Брутто меньше тары. Проверьте вес."),'err');
   else toast(tx("Рейс записан: нетто ")+fmt(r2(g-car.tare))+tx(" кг"));
 }
@@ -41,15 +41,6 @@ function handle(act,b){
       try{localStorage.setItem(TKEY,S.theme);}catch(_){}
       applyTheme();render();toast(tx("Тема: ")+THEME_NAME[S.theme]);break;}
     case 'shift-copy':if(sh)openShiftForm(null,sh.id);break;
-    case 'route-move':{
-      if(!sh)break;
-      const order=[];sh.cars.forEach(c=>{const k=c.route||tx("Без маршрута");if(!order.includes(k))order.push(k);});
-      const i=order.indexOf(b.dataset.route),j=i+(b.dataset.dir==='up'?-1:1);
-      if(i<0||j<0||j>=order.length)break;
-      [order[i],order[j]]=[order[j],order[i]];
-      S.scrollId=null;
-      mutateShift(sh.id,s=>{s.cars=order.flatMap(k=>s.cars.filter(c=>(c.route||tx("Без маршрута"))===k));});
-      break;}
     case 'carview':S.carView=b.dataset.view==='grid'?'grid':'list';try{localStorage.setItem('tarazi.carView',S.carView);}catch(_){}render();break;
     case 'glossary':navigate('glossary');break;
     case 'stats':navigate('stats');break;
