@@ -80,6 +80,7 @@ function storageError(){
   toast(tx("Не удалось сохранить данные на устройстве. Возможно, память заполнена. Скачайте резервную копию."),'err');
 }
 function flushLocal(){
+  if(S.demo)return;
   if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}
   const rec={v:2,savedAt:Date.now(),shifts:plain(S.shifts),glossary:plain(S.glossary)};
   let mirrored=true;

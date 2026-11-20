@@ -8,7 +8,7 @@ function showModal(html,st){
   st.opener=document.activeElement;S.modal=st;
   $modal.innerHTML=html;document.body.classList.add('modal-open');
   const first=$modal.querySelector(st.focus||'input:not([hidden]):not([type=hidden]):not([type=radio]),select,textarea,button');
-  if(first)first.focus();
+  if(first&&!S.demo)first.focus();
 }
 function closeModal(){
   const st=S.modal;S.modal=null;$modal.innerHTML='';document.body.classList.remove('modal-open');

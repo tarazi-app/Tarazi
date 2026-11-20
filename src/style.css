@@ -317,10 +317,9 @@ select.inp{padding-right:8px}
 .tour__card{position:fixed;width:min(92vw,360px);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);outline:0}
 .tour__card h2{margin:0 0 6px;font-size:18px}
 .tour__card p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px}
-.tour__ic{margin-bottom:10px}
-.tour__dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px}
-.tour__dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
-.tour__dots i.is-on{background:var(--accent);width:18px;border-radius:4px}
-.tour__btns{display:flex;justify-content:space-between;gap:10px}
-.tour__btns .btn--primary{flex:1;max-width:170px}
+.tour__bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-bottom:8px}
+.tour__bar i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.tour__n{font-size:12px;color:var(--ink-2);margin-bottom:4px}
+.tour__btns{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tour__btns .btn--primary{flex:1;max-width:170px;margin-left:auto}
 @media (prefers-reduced-motion:reduce){.tour__spot{transition:none}}

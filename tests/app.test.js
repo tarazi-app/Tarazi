@@ -171,23 +171,45 @@ test('уведомление об обновлении версии', async () =
   await ctx.close();
 });
 
-test('гид: показывается новичку, проходится, перезапускается из настроек', async () => {
+test('гид: учебный проход по всем экранам, данные не затрагиваются', async () => {
   const { ctx, page, errors } = await open(browser, url, { shifts: null, width: 360, height: 640 });
   await page.waitForSelector('.tour__card');
-  for (let i = 0; i < 10; i++) {
+  let n = 0, spots = 0;
+  for (;;) {
+    await page.waitForTimeout(350);
     const r = await page.evaluate(() => { const c = document.querySelector('.tour__card').getBoundingClientRect(); return [c.top >= 0, c.bottom <= innerHeight, c.left >= 0, c.right <= innerWidth]; });
-    assert.deepEqual(r, [true, true, true, true], 'карточка вне экрана на шаге ' + i);
-    await page.waitForTimeout(400);
-    if (i > 0 && i < 7) assert.ok(await page.evaluate(() => document.querySelector('.tour__spot').offsetWidth > 20), 'нет подсветки ' + i);
+    assert.deepEqual(r, [true, true, true, true], 'карточка вне экрана на шаге ' + n);
+    if (await page.evaluate(() => document.querySelector('.tour__spot').offsetWidth > 20)) spots++;
+    n++;
+    const last = await page.evaluate(() => document.querySelector('[data-tour=next]').textContent.trim());
     await page.click('[data-tour=next]');
+    if (/Дайын|Готово/.test(last)) break;
+    assert.ok(n < 60);
   }
+  assert.ok(n >= 25 && spots >= 22, 'шагов ' + n + ', с подсветкой ' + spots);
   assert.equal(await page.$('.tour'), null);
+  assert.equal(await page.evaluate(() => Object.keys(window.__t.S.shifts).length), 0, 'учебные смены не должны остаться');
   await page.reload(); await page.waitForSelector('.appbar'); await page.waitForTimeout(700);
   assert.equal(await page.$('.tour'), null, 'не должен показываться повторно');
+  assert.equal(await page.evaluate(() => Object.keys(window.__t.S.shifts).length), 0, 'учебные смены не сохранились');
   await page.evaluate(() => { location.hash = '#settings'; });
   await page.click('[data-act=tour-start]'); await page.waitForSelector('.tour__card');
   await page.click('[data-tour=skip]');
   assert.equal(await page.$('.tour'), null);
+  assert.deepEqual(errors, []);
+  await ctx.close();
+});
+
+test('гид при перезапуске не трогает настоящие смены', async () => {
+  const { ctx, page, errors } = await open(browser, url, { hash: '#settings' });
+  await page.waitForSelector('[data-act=tour-start]');
+  await page.click('[data-act=tour-start]');
+  for (let i = 0; i < 14; i++) { await page.waitForTimeout(150); await page.click('[data-tour=next]'); }
+  await page.click('[data-tour=skip]');
+  assert.deepEqual(await page.evaluate(() => Object.keys(window.__t.S.shifts)), ['s1']);
+  assert.equal(await page.evaluate(() => window.__t.S.shifts.s1.cars.length), 2);
+  await page.reload(); await page.waitForSelector('.appbar');
+  assert.deepEqual(await page.evaluate(() => Object.keys(window.__t.S.shifts)), ['s1']);
   assert.deepEqual(errors, []);
   await ctx.close();
 });

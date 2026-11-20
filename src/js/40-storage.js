@@ -7,14 +7,17 @@ function enqueue(id,job){
   }).then(()=>{pending[id]--;});
 }
 function persist(id){
+  if(S.demo)return;
   if(S.mode==='db'){enqueue(id,async()=>{const s=S.shifts[id];if(!s)return;await S.db.doc('shifts/'+id).set(plain(s));});}
   else saveLocal();
 }
 function persistDelete(id){
+  if(S.demo)return;
   if(S.mode==='db'){enqueue(id,async()=>{await S.db.doc('shifts/'+id).delete();});}
   else saveLocal();
 }
 function persistGlossary(){
+  if(S.demo)return;
   if(S.mode==='db'){enqueue('glossary',async()=>{await S.db.doc('glossary/main').set(plain(S.glossary));});}
   else saveLocal();
 }
@@ -24,6 +27,7 @@ function mutateShift(id,fn){
   S.shifts[id]=next;persist(id);render();
 }
 function onSnap(snap){
+  if(S.demo){S.gotShifts=true;return;}
   const next={};
   snap.docs.forEach(d=>{const v=d.data();if(v&&d.id)next[d.id]=normalize(v,d.id);});
   let changed=false;
@@ -37,6 +41,7 @@ function onSnap(snap){
   if(changed)render();
 }
 function onGlossSnap(snap){
+  if(S.demo){S.gotGloss=true;return;}
   let changed=false;
   if(!pending.glossary){
     const d=snap.exists?normGloss(snap.data()):emptyGloss();
