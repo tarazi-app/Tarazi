@@ -235,6 +235,9 @@ function viewSettings(){
     +`<h1>${tx("Настройки")}</h1>
     <div class="sect"><h2>${tx("Язык")}</h2></div><div class="pills" role="radiogroup" aria-label="${tx("Язык")}">${lg('kk','Қазақша')}${lg('ru','Русский')}</div>
     <div class="sect"><h2>${tx("Тема")}</h2></div><div class="pills" role="radiogroup" aria-label="${tx("Тема")}">${th('light','sun',tx("Светлая"))}${th('dark','moon',tx("Тёмная"))}${th('auto','contrast',tx("Как в системе"))}</div>
+    <div class="sect"><h2>${tx("Гид по приложению")}</h2></div>
+    <p class="lead" style="margin-top:0">${tx("Показать, что и где нажимать, ещё раз.")}</p>
+    <button class="btn" data-act="tour-start">${icon('help','ic--sm')}${tx("Запустить гид")}</button>
     <div class="sect"><h2>${tx("Резервная копия")}</h2></div>
     <p class="lead" style="margin-top:0">${tx("Все смены и справочник одним файлом JSON. Храните его на случай, если данные понадобятся вне сайта.")}</p>
     ${backupButtons()}
@@ -273,6 +276,7 @@ function render(){
   if(S.focusId){const el=document.getElementById(S.focusId);if(el)el.focus();S.focusId=null;}
   else if(aid){const el=document.getElementById(aid);if(el){el.focus({preventScroll:true});if(sel){try{el.setSelectionRange(sel[0],sel[1]);}catch(_){}}}}
   if(S.scrollId){const el=document.getElementById(S.scrollId);if(el)el.scrollIntoView({block:'nearest'});S.scrollId=null;}
+  maybeStartTour();
 }
 function labelTables(){
   $app.querySelectorAll('table.tbl--stack').forEach(t=>{

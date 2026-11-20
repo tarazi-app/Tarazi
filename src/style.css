@@ -310,3 +310,17 @@ select.inp{padding-right:8px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:min(92vw,520px);padding:12px 18px;border-radius:12px;background:var(--navy);color:var(--navy-ink);font-weight:500;z-index:60;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 .toast.is-err{background:var(--bad-solid);color:var(--bad-solid-ink)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* guide */
+.tour{position:fixed;inset:0;z-index:80}
+.tour__spot{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(8,12,24,.72);outline:2px solid var(--accent);transition:all .25s ease;pointer-events:none}
+.tour__card{position:fixed;width:min(92vw,360px);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35);outline:0}
+.tour__card h2{margin:0 0 6px;font-size:18px}
+.tour__card p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px}
+.tour__ic{margin-bottom:10px}
+.tour__dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px}
+.tour__dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.tour__dots i.is-on{background:var(--accent);width:18px;border-radius:4px}
+.tour__btns{display:flex;justify-content:space-between;gap:10px}
+.tour__btns .btn--primary{flex:1;max-width:170px}
+@media (prefers-reduced-motion:reduce){.tour__spot{transition:none}}

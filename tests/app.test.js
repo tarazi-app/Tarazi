@@ -9,6 +9,7 @@ let srv, url, browser;
 before(async () => { ({ srv, url } = await serve()); browser = await chromium.launch(); });
 after(async () => { await browser.close(); srv.close(); });
 
+const day = async page => { await page.waitForSelector('[data-type=day]'); await page.click('[data-type=day]'); await page.waitForSelector('.scard'); };
 const T = (page, fn, arg) => page.evaluate(fn, arg);
 
 test('расчёты: нетто, итоги, разбор чисел и времени', async () => {
@@ -107,13 +108,13 @@ test('отчёт по водителю: только его рейсы и вер
 
 test('хранилище: перенос старых данных, перезагрузка, повреждение и автокопия', async () => {
   const { ctx, page, errors } = await open(browser, url);
-  await page.waitForSelector('.scard');
+  await day(page);
   await page.waitForTimeout(500);
-  await page.reload(); await page.waitForSelector('.scard');            // данные пережили перезагрузку
+  await page.reload(); await day(page);            // данные пережили перезагрузку
   await page.evaluate(() => { localStorage.removeItem('avtovesy.shifts.v1'); localStorage.removeItem('avtovesy.glossary.v1'); });
-  await page.reload(); await page.waitForSelector('.scard');            // читаем из IndexedDB, а не из зеркала
+  await page.reload(); await day(page);            // читаем из IndexedDB, а не из зеркала
   await page.evaluate(() => new Promise(res => { const rq = indexedDB.open('tarazi'); rq.onsuccess = () => { const t = rq.result.transaction('kv', 'readwrite'); t.objectStore('kv').put('МУСОР', 'data'); t.oncomplete = () => res(); }; }));
-  await page.reload(); await page.waitForSelector('.scard');            // повреждение -> автокопия
+  await page.reload(); await day(page);            // повреждение -> автокопия
   assert.match(await page.textContent('#toast'), /автокөшірме/);
   assert.deepEqual(errors, []);
   await ctx.close();
@@ -167,5 +168,26 @@ test('уведомление об обновлении версии', async () =
   await page.waitForSelector('.appbar');
   await page.evaluate(() => window.__updateReady());
   assert.ok(await page.$('[data-act=reload-app]'));
+  await ctx.close();
+});
+
+test('гид: показывается новичку, проходится, перезапускается из настроек', async () => {
+  const { ctx, page, errors } = await open(browser, url, { shifts: null, width: 360, height: 640 });
+  await page.waitForSelector('.tour__card');
+  for (let i = 0; i < 10; i++) {
+    const r = await page.evaluate(() => { const c = document.querySelector('.tour__card').getBoundingClientRect(); return [c.top >= 0, c.bottom <= innerHeight, c.left >= 0, c.right <= innerWidth]; });
+    assert.deepEqual(r, [true, true, true, true], 'карточка вне экрана на шаге ' + i);
+    await page.waitForTimeout(400);
+    if (i > 0 && i < 7) assert.ok(await page.evaluate(() => document.querySelector('.tour__spot').offsetWidth > 20), 'нет подсветки ' + i);
+    await page.click('[data-tour=next]');
+  }
+  assert.equal(await page.$('.tour'), null);
+  await page.reload(); await page.waitForSelector('.appbar'); await page.waitForTimeout(700);
+  assert.equal(await page.$('.tour'), null, 'не должен показываться повторно');
+  await page.evaluate(() => { location.hash = '#settings'; });
+  await page.click('[data-act=tour-start]'); await page.waitForSelector('.tour__card');
+  await page.click('[data-tour=skip]');
+  assert.equal(await page.$('.tour'), null);
+  assert.deepEqual(errors, []);
   await ctx.close();
 });

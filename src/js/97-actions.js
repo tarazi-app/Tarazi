@@ -52,6 +52,7 @@ function handle(act,b){
         text:tx('Текущие данные будут заменены данными из копии от {d} (смен: {n}). Перед этим текущее состояние тоже сохранится как автокопия.',{d:stampOf(t),n:x.n}),
         onConfirm(){restoreSnap(t);}});
       break;}
+    case 'tour-start':navigate('home');startTour();break;
     case 'setlang':setLang(b.dataset.lang);break;
     case 'settheme':{const v=b.dataset.theme;if(v==='light'||v==='dark'||v==='auto'){S.theme=v;try{localStorage.setItem(TKEY,v);}catch(_){}applyTheme();render();}break;}
     case 'range':setRange(b.dataset.range);break;

@@ -44,6 +44,7 @@ async function open(browser, url, { lang = 'kk', shifts = { s1: shift() }, width
     if (shifts) localStorage.setItem('avtovesy.shifts.v1', JSON.stringify(shifts));
   }, [lang, shifts]);
   await page.goto(url + hash);
+  await page.evaluate(() => { const b = document.querySelector('[data-type=day]'); if (b) b.click(); }).catch(() => {});
   return { ctx, page, errors };
 }
 
