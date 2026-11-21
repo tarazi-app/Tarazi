@@ -60,7 +60,7 @@ function summaryHtml(sh){
     <h3>${tx("По водителям и маршрутам")}</h3>
     <div class="box scroll"><table class="tbl tbl--stack"><thead><tr><th>${tx("Водитель")}</th><th>${tx("Маршрут")}</th><th class="r">${tx("Машин")}</th><th class="r">${tx("Рейсов")}</th><th class="r">${tx("Нетто, кг")}</th></tr></thead><tbody>${drs}</tbody></table></div>`;
 }
-const routeHtml=r=>esc(r).replace(/\d+/g,'<span class="rnum">$&</span>');
+const routeHtml=r=>'<span class="rt">'+esc(r).replace(/\d+/g,'<span class="rnum">$&</span>')+'</span>';
 function carCard(sh,c){
   const s=carStats(c),hex=colorHex(c.color);
   return `<a class="ccard" id="car-${esc(c.id)}" style="border-left-color:${hex}" href="#car-${esc(sh.id)}-${esc(c.id)}" data-act="open-car" data-car="${esc(c.id)}">

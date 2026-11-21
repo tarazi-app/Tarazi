@@ -293,3 +293,13 @@ test('переименование в справочнике меняет и с�
   assert.deepEqual(errors, []);
   await ctx.close();
 });
+
+test('таблица маршрутов на телефоне: название маршрута одним куском', async () => {
+  const sh = shift({ cars: [car(1, { route: 'РС3-ДСК2' })] });
+  const { ctx, page } = await open(browser, url, { shifts: { s1: sh }, hash: '#shift-s1', width: 360, height: 640 });
+  await page.waitForSelector('.tbl--stack');
+  const cells = await page.$$eval('.tbl--stack td .rt', e => e.map(x => [x.textContent, x.getBoundingClientRect().width > 60, x.parentElement.children.length]));
+  assert.ok(cells.length >= 2);
+  for (const [txt, wide, kids] of cells) { assert.equal(txt, 'РС3-ДСК2'); assert.ok(wide); assert.equal(kids, 1); }
+  await ctx.close();
+});

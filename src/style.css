@@ -327,3 +327,6 @@ select.inp{padding-right:8px}
 .tour__btns{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .tour__btns .btn--primary{flex:1;max-width:170px;margin-left:auto}
 @media (prefers-reduced-motion:reduce){.tour__spot{transition:none}}
+
+.rt{display:inline;min-width:0}
+.tbl--stack td>.rt{display:block;text-align:right}
